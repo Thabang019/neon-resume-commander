@@ -5,11 +5,22 @@ import { Check } from 'lucide-react';
 interface ProgressBarProps {
   currentStep: number;
   totalSteps: number;
+  onStepClick?: (step: number) => void;
 }
 
-const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Preview'];
+const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Projects', 'Preview'];
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalSteps }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({ 
+  currentStep, 
+  totalSteps, 
+  onStepClick 
+}) => {
+  const handleStepClick = (stepNumber: number) => {
+    if (onStepClick && stepNumber <= currentStep) {
+      onStepClick(stepNumber);
+    }
+  };
+
   return (
     <div className="glass-panel p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-4">
@@ -26,6 +37,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
           const stepNumber = index + 1;
           const isCompleted = stepNumber < currentStep;
           const isCurrent = stepNumber === currentStep;
+          const isClickable = stepNumber <= currentStep;
           
           return (
             <React.Fragment key={stepNumber}>
@@ -39,7 +51,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
                         ? 'bg-cyber-blue/20 border-cyber-blue text-cyber-blue animate-glow-pulse' 
                         : 'border-muted bg-muted/20 text-muted-foreground'
                     }
+                    ${isClickable && onStepClick 
+                      ? 'cursor-pointer hover:scale-110 hover:brightness-110' 
+                      : ''
+                    }
                   `}
+                  onClick={() => handleStepClick(stepNumber)}
                 >
                   {isCompleted ? (
                     <Check className="w-5 h-5" />

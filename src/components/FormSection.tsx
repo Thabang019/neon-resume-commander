@@ -5,6 +5,7 @@ import { PersonalInfoForm } from './forms/PersonalInfoForm';
 import { ExperienceForm } from './forms/ExperienceForm';
 import { EducationForm } from './forms/EducationForm';
 import { SkillsForm } from './forms/SkillsForm';
+import { ProjectsForm } from './forms/ProjectsForm';
 import { PreviewForm } from './forms/PreviewForm';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -54,6 +55,13 @@ export const FormSection: React.FC<FormSectionProps> = ({
           />
         );
       case 5:
+        return (
+          <ProjectsForm
+            data={formData.projects}
+            onUpdate={(data) => updateFormData('projects', data)}
+          />
+        );
+      case 6:
         return <PreviewForm formData={formData} />;
       default:
         return null;
@@ -84,10 +92,10 @@ export const FormSection: React.FC<FormSectionProps> = ({
 
         <button
           onClick={nextStep}
-          disabled={currentStep === 5}
+          disabled={currentStep === 6}
           className={`
             flex items-center gap-2 px-6 py-2 rounded-lg font-mono transition-all duration-300
-            ${currentStep === 5
+            ${currentStep === 6
               ? 'text-muted-foreground cursor-not-allowed opacity-50'
               : 'cyber-button'
             }

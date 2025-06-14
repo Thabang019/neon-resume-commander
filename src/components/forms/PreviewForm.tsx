@@ -56,6 +56,18 @@ export const PreviewForm: React.FC<PreviewFormProps> = ({ formData }) => {
       });
     }
 
+    // Projects
+    if (formData.projects.length > 0) {
+      totalFields += formData.projects.length * 5;
+      formData.projects.forEach(project => {
+        if (project.name) filledFields++;
+        if (project.description) filledFields++;
+        if (project.technologies) filledFields++;
+        if (project.startDate) filledFields++;
+        if (project.endDate || project.current) filledFields++;
+      });
+    }
+
     return totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
   };
 
@@ -106,6 +118,10 @@ export const PreviewForm: React.FC<PreviewFormProps> = ({ formData }) => {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Experience:</span>
               <span className="text-cyber-blue">{formData.experience.length} entries</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Projects:</span>
+              <span className="text-cyber-blue">{formData.projects.length} entries</span>
             </div>
           </div>
           <div className="space-y-2">

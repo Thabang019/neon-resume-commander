@@ -17,7 +17,8 @@ const initialFormData: FormData = {
   },
   experience: [],
   education: [],
-  skills: []
+  skills: [],
+  projects: []
 };
 
 export const ResumeBuilder: React.FC = () => {
@@ -32,7 +33,7 @@ export const ResumeBuilder: React.FC = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -43,6 +44,10 @@ export const ResumeBuilder: React.FC = () => {
     }
   };
 
+  const goToStep = (step: number) => {
+    setCurrentStep(step);
+  };
+
   return (
     <div className="min-h-screen bg-animated-gradient bg-300% animate-gradient-shift">
       <div className="scan-lines absolute inset-0 pointer-events-none" />
@@ -50,7 +55,11 @@ export const ResumeBuilder: React.FC = () => {
       <Header />
       
       <div className="container mx-auto px-4 py-8">
-        <ProgressBar currentStep={currentStep} totalSteps={5} />
+        <ProgressBar 
+          currentStep={currentStep} 
+          totalSteps={6} 
+          onStepClick={goToStep}
+        />
         
         <div className="grid lg:grid-cols-2 gap-8 mt-8">
           {/* Form Section */}

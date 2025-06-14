@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { FormData } from './types';
-import { MapPin, Mail, Phone, Linkedin, Globe, Calendar, Star } from 'lucide-react';
+import { MapPin, Mail, Phone, Linkedin, Globe, Calendar, Star, ExternalLink, Code } from 'lucide-react';
 
 interface ResumePreviewProps {
   formData: FormData;
 }
 
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ formData }) => {
-  const { personalInfo, experience, education, skills } = formData;
+  const { personalInfo, experience, education, skills, projects } = formData;
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
@@ -102,6 +102,48 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ formData }) => {
           </div>
         )}
 
+        {/* Projects */}
+        {projects.length > 0 && (
+          <div className="mb-6">
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-2 mb-4">
+              PROJECTS
+            </h2>
+            <div className="space-y-4">
+              {projects.map((project) => (
+                <div key={project.id} className="space-y-2">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <Code className="w-4 h-4" />
+                        <h3 className="font-bold">{project.name || 'Project Name'}</h3>
+                        {project.url && (
+                          <a href={project.url} className="text-blue-600 hover:text-blue-800">
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                      {project.technologies && (
+                        <p className="text-gray-600 text-sm">
+                          <strong>Technologies:</strong> {project.technologies}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-right text-sm flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      {formatDate(project.startDate)} - {project.current ? 'Present' : formatDate(project.endDate)}
+                    </div>
+                  </div>
+                  {project.description && (
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Education */}
         {education.length > 0 && (
           <div className="mb-6">
@@ -166,7 +208,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ formData }) => {
         )}
 
         {/* Placeholder when empty */}
-        {!personalInfo.fullName && experience.length === 0 && education.length === 0 && skills.length === 0 && (
+        {!personalInfo.fullName && experience.length === 0 && education.length === 0 && skills.length === 0 && projects.length === 0 && (
           <div className="text-center py-16 text-gray-400">
             <div className="text-lg mb-2">Preview will appear here</div>
             <div className="text-sm">Start filling out the form to see your resume</div>
