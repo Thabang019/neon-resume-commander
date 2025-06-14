@@ -57,7 +57,7 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({ data, onUpdate }) =>
           <div key={project.id} className="cyber-card space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-neon-pink font-mono">
-                PROJECT #{index + 1:02d}
+                PROJECT #{String(index + 1).padStart(2, '0')}
               </h3>
               <button
                 onClick={() => removeProject(project.id)}
