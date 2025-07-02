@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { FormData } from './types';
+import { TemplateType } from './templates/TemplatePreview';
 import { FormSection } from './FormSection';
 import { ResumePreview } from './ResumePreview';
 import { ProgressBar } from './ProgressBar';
@@ -24,6 +24,7 @@ const initialFormData: FormData = {
 export const ResumeBuilder: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>('classic');
 
   const updateFormData = (section: keyof FormData, data: any) => {
     setFormData(prev => ({
@@ -33,7 +34,7 @@ export const ResumeBuilder: React.FC = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -48,6 +49,10 @@ export const ResumeBuilder: React.FC = () => {
     setCurrentStep(step);
   };
 
+  const handleTemplateChange = (template: TemplateType) => {
+    setSelectedTemplate(template);
+  };
+
   return (
     <div className="min-h-screen bg-animated-gradient bg-300% animate-gradient-shift">
       <div className="scan-lines absolute inset-0 pointer-events-none" />
@@ -57,7 +62,7 @@ export const ResumeBuilder: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep} 
-          totalSteps={6} 
+          totalSteps={7} 
           onStepClick={goToStep}
         />
         
@@ -67,7 +72,9 @@ export const ResumeBuilder: React.FC = () => {
             <FormSection
               currentStep={currentStep}
               formData={formData}
+              selectedTemplate={selectedTemplate}
               updateFormData={updateFormData}
+              onTemplateChange={handleTemplateChange}
               nextStep={nextStep}
               prevStep={prevStep}
             />
@@ -75,7 +82,10 @@ export const ResumeBuilder: React.FC = () => {
 
           {/* Preview Section */}
           <div className="glass-panel p-6 animate-slide-in-right">
-            <ResumePreview formData={formData} />
+            <ResumePreview 
+              formData={formData} 
+              selectedTemplate={selectedTemplate}
+            />
           </div>
         </div>
       </div>

@@ -1,18 +1,21 @@
-
 import React from 'react';
 import { FormData } from './types';
+import { TemplateType } from './templates/TemplatePreview';
 import { PersonalInfoForm } from './forms/PersonalInfoForm';
 import { ExperienceForm } from './forms/ExperienceForm';
 import { EducationForm } from './forms/EducationForm';
 import { SkillsForm } from './forms/SkillsForm';
 import { ProjectsForm } from './forms/ProjectsForm';
+import { TemplateSelectionForm } from './forms/TemplateSelectionForm';
 import { PreviewForm } from './forms/PreviewForm';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface FormSectionProps {
   currentStep: number;
   formData: FormData;
+  selectedTemplate: TemplateType;
   updateFormData: (section: keyof FormData, data: any) => void;
+  onTemplateChange: (template: TemplateType) => void;
   nextStep: () => void;
   prevStep: () => void;
 }
@@ -20,7 +23,9 @@ interface FormSectionProps {
 export const FormSection: React.FC<FormSectionProps> = ({
   currentStep,
   formData,
+  selectedTemplate,
   updateFormData,
+  onTemplateChange,
   nextStep,
   prevStep,
 }) => {
@@ -62,7 +67,19 @@ export const FormSection: React.FC<FormSectionProps> = ({
           />
         );
       case 6:
-        return <PreviewForm formData={formData} />;
+        return (
+          <TemplateSelectionForm
+            selectedTemplate={selectedTemplate}
+            onTemplateChange={onTemplateChange}
+          />
+        );
+      case 7:
+        return (
+          <PreviewForm 
+            formData={formData} 
+            selectedTemplate={selectedTemplate}
+          />
+        );
       default:
         return null;
     }
@@ -92,10 +109,10 @@ export const FormSection: React.FC<FormSectionProps> = ({
 
         <button
           onClick={nextStep}
-          disabled={currentStep === 6}
+          disabled={currentStep === 7}
           className={`
             flex items-center gap-2 px-6 py-2 rounded-lg font-mono transition-all duration-300
-            ${currentStep === 6
+            ${currentStep === 7
               ? 'text-muted-foreground cursor-not-allowed opacity-50'
               : 'cyber-button'
             }

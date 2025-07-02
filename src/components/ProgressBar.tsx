@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Check } from 'lucide-react';
 
@@ -8,7 +7,7 @@ interface ProgressBarProps {
   onStepClick?: (step: number) => void;
 }
 
-const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Projects', 'Preview'];
+const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Projects', 'Template', 'Preview'];
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ 
   currentStep, 

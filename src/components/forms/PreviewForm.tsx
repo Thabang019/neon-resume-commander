@@ -1,17 +1,18 @@
-
 import React from 'react';
 import { FormData } from '../types';
-import { Download, CheckCircle, Sparkles } from 'lucide-react';
+import { TemplateType } from '../templates/TemplatePreview';
+import { Download, CheckCircle, Sparkles, FileText, Palette, Zap } from 'lucide-react';
 
 interface PreviewFormProps {
   formData: FormData;
+  selectedTemplate: TemplateType;
 }
 
-export const PreviewForm: React.FC<PreviewFormProps> = ({ formData }) => {
+export const PreviewForm: React.FC<PreviewFormProps> = ({ formData, selectedTemplate }) => {
   const handleDownload = () => {
-    // In a real app, this would generate and download a PDF
-    console.log('Generating PDF resume...', formData);
-    alert('🚀 Resume download initiated! (This is a demo)');
+    // In a real app, this would generate and download a PDF with the selected template
+    console.log('Generating PDF resume with template:', selectedTemplate, formData);
+    alert(`🚀 Resume download initiated with ${selectedTemplate} template! (This is a demo)`);
   };
 
   const getCompletionPercentage = () => {
@@ -71,7 +72,26 @@ export const PreviewForm: React.FC<PreviewFormProps> = ({ formData }) => {
     return totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
   };
 
+  const getTemplateIcon = () => {
+    switch (selectedTemplate) {
+      case 'classic': return FileText;
+      case 'modern': return Zap;
+      case 'creative': return Palette;
+      default: return FileText;
+    }
+  };
+
+  const getTemplateName = () => {
+    switch (selectedTemplate) {
+      case 'classic': return 'Classic Professional';
+      case 'modern': return 'Modern Minimalist';
+      case 'creative': return 'Creative Portfolio';
+      default: return 'Classic Professional';
+    }
+  };
+
   const completionPercentage = getCompletionPercentage();
+  const TemplateIcon = getTemplateIcon();
 
   return (
     <div className="space-y-6">
@@ -133,28 +153,41 @@ export const PreviewForm: React.FC<PreviewFormProps> = ({ formData }) => {
               <span className="text-muted-foreground">Skills:</span>
               <span className="text-cyber-blue">{formData.skills.length} skills</span>
             </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Template:</span>
+              <span className="text-neon-pink">{getTemplateName()}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="cyber-card text-center space-y-4">
-        <div className="flex items-center justify-center gap-2 text-neon-pink mb-4">
-          <Sparkles className="w-5 h-5 animate-pulse" />
-          <span className="font-mono">DOWNLOAD READY</span>
-          <Sparkles className="w-5 h-5 animate-pulse" />
+      <div className="cyber-card space-y-4">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <TemplateIcon className="w-6 h-6 text-neon-pink" />
+          <span className="text-lg font-semibold text-neon-pink">
+            {getTemplateName()} Template Selected
+          </span>
         </div>
         
-        <button
-          onClick={handleDownload}
-          className="cyber-button text-lg px-8 py-4 flex items-center gap-3 mx-auto animate-glow-pulse"
-        >
-          <Download className="w-5 h-5" />
-          DOWNLOAD RESUME.PDF
-        </button>
-        
-        <p className="text-xs text-muted-foreground font-mono mt-4">
-          // High-resolution PDF generation protocol activated
-        </p>
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-2 text-neon-pink mb-4">
+            <Sparkles className="w-5 h-5 animate-pulse" />
+            <span className="font-mono">DOWNLOAD READY</span>
+            <Sparkles className="w-5 h-5 animate-pulse" />
+          </div>
+          
+          <button
+            onClick={handleDownload}
+            className="cyber-button text-lg px-8 py-4 flex items-center gap-3 mx-auto animate-glow-pulse"
+          >
+            <Download className="w-5 h-5" />
+            DOWNLOAD {getTemplateName().toUpperCase()} RESUME.PDF
+          </button>
+          
+          <p className="text-xs text-muted-foreground font-mono mt-4">
+            // High-resolution PDF generation protocol activated
+          </p>
+        </div>
       </div>
     </div>
   );
