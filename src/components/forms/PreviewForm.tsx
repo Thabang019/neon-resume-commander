@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormData } from '../types';
 import { TemplateType } from '../templates/TemplatePreview';
-import { Download, CheckCircle, Sparkles, FileText, Palette, Zap } from 'lucide-react';
+import { Download, CheckCircle, Sparkles, FileText, Palette, Zap, Loader2 } from 'lucide-react';
+import { generatePDF } from '../../utils/pdfGenerator';
+import { toast } from 'sonner';
 
 interface PreviewFormProps {
   formData: FormData;
@@ -9,10 +11,25 @@ interface PreviewFormProps {
 }
 
 export const PreviewForm: React.FC<PreviewFormProps> = ({ formData, selectedTemplate }) => {
-  const handleDownload = () => {
-    // In a real app, this would generate and download a PDF with the selected template
-    console.log('Generating PDF resume with template:', selectedTemplate, formData);
-    alert(`🚀 Resume download initiated with ${selectedTemplate} template! (This is a demo)`);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleDownload = async () => {
+    if (!formData.personalInfo.fullName.trim()) {
+      toast.error('Please enter your full name before downloading');
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      await generatePDF(formData, selectedTemplate);
+      toast.success('Resume downloaded successfully!');
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const getCompletionPercentage = () => {
@@ -178,15 +195,31 @@ export const PreviewForm: React.FC<PreviewFormProps> = ({ formData, selectedTemp
           
           <button
             onClick={handleDownload}
-            className="cyber-button text-lg px-8 py-4 flex items-center gap-3 mx-auto animate-glow-pulse"
+            disabled={isGenerating || !formData.personalInfo.fullName.trim()}
+            className="cyber-button text-lg px-8 py-4 flex items-center gap-3 mx-auto animate-glow-pulse disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Download className="w-5 h-5" />
-            DOWNLOAD {getTemplateName().toUpperCase()} RESUME.PDF
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                GENERATING PDF...
+              </>
+            ) : (
+              <>
+                <Download className="w-5 h-5" />
+                DOWNLOAD {getTemplateName().toUpperCase()} RESUME.PDF
+              </>
+            )}
           </button>
           
           <p className="text-xs text-muted-foreground font-mono mt-4">
-            // High-resolution PDF generation protocol activated
+            // High-resolution PDF generation protocol {isGenerating ? 'in progress' : 'activated'}
           </p>
+          
+          {!formData.personalInfo.fullName.trim() && (
+            <p className="text-xs text-red-400 font-mono mt-2">
+              ⚠️ Full name required for PDF generation
+            </p>
+          )}
         </div>
       </div>
     </div>
