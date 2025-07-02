@@ -7,6 +7,7 @@ import { EducationForm } from './forms/EducationForm';
 import { SkillsForm } from './forms/SkillsForm';
 import { ProjectsForm } from './forms/ProjectsForm';
 import { TemplateSelectionForm } from './forms/TemplateSelectionForm';
+import { ATSAnalysisForm } from './forms/ATSAnalysisForm';
 import { PreviewForm } from './forms/PreviewForm';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -75,6 +76,12 @@ export const FormSection: React.FC<FormSectionProps> = ({
         );
       case 7:
         return (
+          <ATSAnalysisForm
+            formData={formData}
+          />
+        );
+      case 8:
+        return (
           <PreviewForm 
             formData={formData} 
             selectedTemplate={selectedTemplate}
@@ -109,10 +116,10 @@ export const FormSection: React.FC<FormSectionProps> = ({
 
         <button
           onClick={nextStep}
-          disabled={currentStep === 7}
+          disabled={currentStep === 8}
           className={`
             flex items-center gap-2 px-6 py-2 rounded-lg font-mono transition-all duration-300
-            ${currentStep === 7
+            ${currentStep === 8
               ? 'text-muted-foreground cursor-not-allowed opacity-50'
               : 'cyber-button'
             }

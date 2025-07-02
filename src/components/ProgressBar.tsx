@@ -7,7 +7,7 @@ interface ProgressBarProps {
   onStepClick?: (step: number) => void;
 }
 
-const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Projects', 'Template', 'Preview'];
+const stepLabels = ['Personal', 'Experience', 'Education', 'Skills', 'Projects', 'Template', 'ATS Analysis', 'Preview'];
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ 
   currentStep, 

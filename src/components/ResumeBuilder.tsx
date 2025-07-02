@@ -34,7 +34,7 @@ export const ResumeBuilder: React.FC = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 7) {
+    if (currentStep < 8) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -62,7 +62,7 @@ export const ResumeBuilder: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep} 
-          totalSteps={7} 
+          totalSteps={8} 
           onStepClick={goToStep}
         />
         
@@ -82,10 +82,19 @@ export const ResumeBuilder: React.FC = () => {
 
           {/* Preview Section */}
           <div className="glass-panel p-6 animate-slide-in-right">
-            <ResumePreview 
-              formData={formData} 
-              selectedTemplate={selectedTemplate}
-            />
+            {currentStep === 7 ? (
+              <div className="text-center py-16">
+                <div className="text-lg mb-2 text-cyber-blue glow-text">ATS Analysis in Progress</div>
+                <div className="text-sm text-muted-foreground font-mono">
+                  Complete the analysis to see your optimized resume preview
+                </div>
+              </div>
+            ) : (
+              <ResumePreview 
+                formData={formData} 
+                selectedTemplate={selectedTemplate}
+              />
+            )}
           </div>
         </div>
       </div>
