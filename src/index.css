@@ -80,7 +80,13 @@
 
 @layer components {
   .cyber-card {
-    @apply bg-ice-dark/90 backdrop-blur-lg border border-ice-darkest/60 rounded-lg p-6;
+    @apply bg-ice-dark/20 backdrop-blur-lg border border-ice-darkest/60 rounded-lg p-6;
+    box-shadow: 0 8px 32px rgba(32, 48, 56, 0.25);
+    color: #F0FBFA; /* Force light text on dark cards */
+  }
+
+  .cyber-card2 {
+    @apply bg-ice-darkest backdrop-blur-lg border border-ice-darkest/60 rounded-lg p-6;
     box-shadow: 0 8px 32px rgba(32, 48, 56, 0.25);
     color: #F0FBFA; /* Force light text on dark cards */
   }
@@ -141,7 +147,7 @@
   }
 
   .cyber-label {
-    @apply flex items-center gap-2 text-sm font-medium text-ice-lightest;
+    @apply flex items-center gap-2 text-sm font-medium text-ice-dark;
   }
 
   .cyber-input {
@@ -171,7 +177,7 @@
 
   /* Force all text elements to have proper contrast */
   .text-muted-foreground {
-    @apply text-ice-lightest !important;
+    @apply text-ice-darkest !important;
   }
 
   /* Secondary text that needs to be slightly lighter but still visible */
@@ -182,56 +188,5 @@
   /* Placeholder text styling */
   ::placeholder {
     @apply text-ice-dark opacity-70;
-  }
-
-  /* Override any remaining orange/yellow colors with ice palette */
-  .text-yellow-400,
-  .text-yellow-600,
-  .text-orange-400,
-  .text-orange-500,
-  .text-orange-600 {
-    @apply text-ice-lightest;
-  }
-
-  .text-yellow-800,
-  .text-orange-800 {
-    @apply text-ice-lightest;
-  }
-
-  .bg-yellow-50,
-  .bg-orange-50 {
-    @apply bg-ice-dark;
-  }
-
-  .bg-yellow-100,
-  .bg-orange-100 {
-    @apply bg-ice-dark;
-  }
-
-  .border-yellow-200,
-  .border-orange-200 {
-    @apply border-ice-medium;
-  }
-
-  .from-yellow-400,
-  .from-orange-400 {
-    @apply from-ice-medium;
-  }
-
-  .to-orange-400,
-  .to-orange-500 {
-    @apply to-ice-darkest;
-  }
-
-  /* Ensure all card content is visible */
-  .cyber-card .text-sm,
-  .cyber-card .text-xs {
-    @apply text-ice-lightest;
-  }
-
-  /* Override specific text colors in cards */
-  .cyber-card .text-ice-darkest,
-  .cyber-card .text-ice-dark {
-    @apply text-ice-lightest !important;
   }
 }

@@ -146,7 +146,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, onUpdate }
 
         <button
           onClick={addExperience}
-          className="w-full border-2 border-dashed border-cyber-blue/30 rounded-lg p-6 text-cyber-blue hover:border-cyber-blue/50 hover:bg-cyber-blue/5 transition-all duration-300 flex items-center justify-center gap-2 font-mono"
+          className="w-full cyber-button-secondary flex items-center justify-center gap-2 py-4"
         >
           <Plus className="w-5 h-5" />
           ADD EXPERIENCE MODULE

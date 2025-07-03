@@ -77,40 +77,40 @@ const handleAnalyze = async () => {
 };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-ice-lightest';
-    if (score >= 60) return 'text-ice-light';
-    return 'text-red-300';
+    if (score >= 80) return 'text-neon-green';
+    if (score >= 60) return 'text-yellow-400';
+    return 'text-red-400';
   };
 
   const getScoreBackground = (score: number) => {
-    if (score >= 80) return 'from-ice-medium to-ice-dark';
-    if (score >= 60) return 'from-ice-dark to-ice-darkest';
-    return 'from-red-600 to-red-700';
+    if (score >= 80) return 'from-neon-green to-green-400';
+    if (score >= 60) return 'from-yellow-400 to-orange-400';
+    return 'from-red-400 to-red-600';
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-100 bg-red-800 border-red-600';
-      case 'medium': return 'text-ice-lightest bg-ice-darkest border-ice-dark';
-      case 'low': return 'text-ice-lightest bg-ice-dark border-ice-medium';
-      default: return 'text-ice-lightest bg-ice-dark border-ice-medium';
+      case 'high': return 'text-red-400 bg-red-400/10 border-red-400/30';
+      case 'medium': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30';
+      case 'low': return 'text-blue-400 bg-blue-400/10 border-blue-400/30';
+      default: return 'text-gray-400 bg-gray-400/10 border-gray-400/30';
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-ice-darkest glow-text mb-2">
+        <h2 className="text-2xl font-bold text-cyber-blue glow-text mb-2">
           ATS COMPATIBILITY ANALYSIS
         </h2>
-        <p className="text-ice-darkest font-mono text-sm">
+        <p className="text-muted-foreground font-mono text-sm">
           // Optimize your resume against job requirements
         </p>
       </div>
 
       {/* Job Description Input */}
       <div className="cyber-card space-y-4">
-        <h3 className="text-lg font-semibold text-ice-lightest font-mono">
+        <h3 className="text-lg font-semibold text-neon-pink font-mono">
           JOB DESCRIPTION INPUT
         </h3>
         
@@ -128,13 +128,13 @@ const handleAnalyze = async () => {
                 onChange={handleFileUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="cyber-input flex items-center justify-center py-8 border-2 border-dashed border-ice-light/50 hover:border-ice-light/70 transition-colors bg-ice-darkest/30">
+              <div className="cyber-input flex items-center justify-center py-8 border-2 border-dashed border-cyber-blue/30 hover:border-cyber-blue/50 transition-colors">
                 <div className="text-center">
-                  <Upload className="w-8 h-8 text-ice-light mx-auto mb-2" />
-                  <p className="text-sm text-ice-lightest">
+                  <Upload className="w-8 h-8 text-cyber-blue mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
                     {uploadedFile ? uploadedFile.name : 'Drop PDF, DOCX, or TXT file here'}
                   </p>
-                  <p className="text-xs text-ice-light mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     or click to browse
                   </p>
                 </div>
@@ -153,7 +153,7 @@ const handleAnalyze = async () => {
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste the job description here..."
               rows={8}
-              className="w-full px-4 py-3 rounded-lg bg-ice-darkest/30 border-ice-light/50 text-ice-lightest placeholder:text-ice-light font-mono text-sm resize-none"
+              className="cyber-input resize-none"
             />
           </div>
         </div>
@@ -183,12 +183,12 @@ const handleAnalyze = async () => {
           {/* Overall Score */}
           <div className="cyber-card text-center">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-ice-lightest font-mono">
+              <h3 className="text-lg font-semibold text-neon-pink font-mono">
                 COMPATIBILITY SCORE
               </h3>
               <button
                 onClick={() => setShowDetailedView(!showDetailedView)}
-                className="flex items-center gap-2 text-ice-light hover:text-ice-lightest transition-colors"
+                className="flex items-center gap-2 text-cyber-blue hover:text-neon-pink transition-colors"
               >
                 {showDetailedView ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 {showDetailedView ? 'Quick View' : 'Detailed View'}
@@ -196,25 +196,25 @@ const handleAnalyze = async () => {
             </div>
             
             <div className="relative w-32 h-32 mx-auto mb-4">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ice-light to-ice-medium"></div>
-              <div className="absolute inset-2 rounded-full bg-ice-darkest flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-space-blue to-deep-purple"></div>
+              <div className="absolute inset-2 rounded-full bg-space-dark flex items-center justify-center">
                 <div className="text-center">
                   <div className={`text-3xl font-bold ${getScoreColor(analysisResult.overallScore)}`}>
                     {analysisResult.overallScore}%
                   </div>
-                  <div className="text-xs text-ice-lightest">ATS Score</div>
+                  <div className="text-xs text-muted-foreground">ATS Score</div>
                 </div>
               </div>
             </div>
 
-            <div className="w-full bg-ice-darkest/50 rounded-full h-3 mb-4">
+            <div className="w-full bg-space-blue/30 rounded-full h-3 mb-4">
               <div 
                 className={`bg-gradient-to-r ${getScoreBackground(analysisResult.overallScore)} h-3 rounded-full transition-all duration-1000 animate-glow-pulse`}
                 style={{ width: `${analysisResult.overallScore}%` }}
               />
             </div>
 
-            <p className="text-sm text-ice-lightest font-mono">
+            <p className="text-sm text-muted-foreground font-mono">
               {analysisResult.overallScore >= 80 ? '// Excellent ATS compatibility' :
                analysisResult.overallScore >= 60 ? '// Good compatibility with room for improvement' :
                '// Needs significant optimization for ATS systems'}
@@ -225,31 +225,31 @@ const handleAnalyze = async () => {
           {!showDetailedView && (
             <div className="grid md:grid-cols-3 gap-4">
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-ice-lightest mb-2">
+                <div className="text-2xl font-bold text-cyber-blue mb-2">
                   {analysisResult.keywordMatches.filter(k => k.found).length}/{analysisResult.keywordMatches.length}
                 </div>
-                <div className="text-sm text-ice-lightest">Keywords Matched</div>
+                <div className="text-sm text-muted-foreground">Keywords Matched</div>
               </div>
               
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-ice-lightest mb-2">
+                <div className="text-2xl font-bold text-neon-pink mb-2">
                   {analysisResult.hardSkillsAnalysis.foundSkills.length}/{analysisResult.hardSkillsAnalysis.requiredSkills.length}
                 </div>
-                <div className="text-sm text-ice-lightest">Skills Matched</div>
+                <div className="text-sm text-muted-foreground">Skills Matched</div>
               </div>
               
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-ice-lightest mb-2">
+                <div className="text-2xl font-bold text-neon-green mb-2">
                   {analysisResult.formattingCheck.score}%
                 </div>
-                <div className="text-sm text-ice-lightest">Format Score</div>
+                <div className="text-sm text-muted-foreground">Format Score</div>
               </div>
             </div>
           )}
 
           {/* Top Recommendations */}
-          <div className="cyber-card">
-            <h3 className="text-lg font-semibold text-ice-lightest font-mono mb-4">
+          <div className="cyber-card2">
+            <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
               TOP RECOMMENDATIONS
             </h3>
             <div className="space-y-3">
@@ -268,8 +268,8 @@ const handleAnalyze = async () => {
                           {rec.priority}
                         </span>
                       </div>
-                      <p className="text-sm opacity-90 mb-2">{rec.description}</p>
-                      <p className="text-xs font-mono opacity-80">→ {rec.action}</p>
+                      <p className="text-sm opacity-80 mb-2">{rec.description}</p>
+                      <p className="text-xs font-mono opacity-60">→ {rec.action}</p>
                     </div>
                   </div>
                 </div>
@@ -281,23 +281,23 @@ const handleAnalyze = async () => {
           {showDetailedView && (
             <div className="space-y-6">
               {/* Keyword Analysis */}
-              <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-ice-lightest font-mono mb-4">
+              <div className="cyber-card2">
+                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
                   KEYWORD ANALYSIS
                 </h3>
                 <div className="grid gap-2 max-h-60 overflow-y-auto">
                   {analysisResult.keywordMatches.slice(0, 20).map((keyword, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 rounded bg-ice-darkest/50">
-                      <span className="text-sm font-mono text-ice-lightest">{keyword.keyword}</span>
+                    <div key={index} className="flex items-center justify-between p-2 rounded bg-space-blue/20">
+                      <span className="text-sm font-mono">{keyword.keyword}</span>
                       <div className="flex items-center gap-2">
                         <span className={`text-xs px-2 py-1 rounded ${
-                          keyword.importance === 'high' ? 'bg-red-800 text-red-100' :
-                          keyword.importance === 'medium' ? 'bg-ice-darkest text-ice-lightest border border-ice-medium' :
-                          'bg-ice-dark text-ice-lightest border border-ice-light'
+                          keyword.importance === 'high' ? 'bg-red-400/20 text-red-400' :
+                          keyword.importance === 'medium' ? 'bg-yellow-400/20 text-yellow-400' :
+                          'bg-blue-400/20 text-blue-400'
                         }`}>
                           {keyword.importance}
                         </span>
-                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-ice-light' : 'bg-red-500'}`} />
+                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-neon-green' : 'bg-red-400'}`} />
                       </div>
                     </div>
                   ))}
@@ -305,26 +305,26 @@ const handleAnalyze = async () => {
               </div>
 
               {/* Skills Analysis */}
-              <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-ice-lightest font-mono mb-4">
+              <div className="cyber-card2">
+                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
                   SKILLS ANALYSIS
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="text-sm font-semibold text-ice-light mb-2">Found Skills</h4>
+                    <h4 className="text-sm font-semibold text-neon-green mb-2">Found Skills</h4>
                     <div className="space-y-1">
                       {analysisResult.hardSkillsAnalysis.foundSkills.map((skill, index) => (
-                        <div key={index} className="text-sm font-mono text-ice-light">
+                        <div key={index} className="text-sm font-mono text-neon-green">
                           ✓ {skill}
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-red-300 mb-2">Missing Critical Skills</h4>
+                    <h4 className="text-sm font-semibold text-red-400 mb-2">Missing Critical Skills</h4>
                     <div className="space-y-1">
                       {analysisResult.hardSkillsAnalysis.missingCriticalSkills.map((skill, index) => (
-                        <div key={index} className="text-sm font-mono text-red-300">
+                        <div key={index} className="text-sm font-mono text-red-400">
                           ✗ {skill}
                         </div>
                       ))}
@@ -334,29 +334,29 @@ const handleAnalyze = async () => {
               </div>
 
               {/* Formatting Check */}
-              <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-ice-lightest font-mono mb-4">
+              <div className="cyber-card2">
+                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
                   FORMATTING ANALYSIS
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="text-sm font-semibold text-ice-light mb-2">Strengths</h4>
+                    <h4 className="text-sm font-semibold text-neon-green mb-2">Strengths</h4>
                     <div className="space-y-1">
                       {analysisResult.formattingCheck.strengths.map((strength, index) => (
-                        <div key={index} className="text-sm text-ice-light">
+                        <div key={index} className="text-sm text-neon-green">
                           ✓ {strength}
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-ice-lightest mb-2">Issues</h4>
+                    <h4 className="text-sm font-semibold text-yellow-400 mb-2">Issues</h4>
                     <div className="space-y-1">
                       {analysisResult.formattingCheck.issues.map((issue, index) => (
                         <div key={index} className={`text-sm ${
-                          issue.type === 'critical' ? 'text-red-300' :
-                          issue.type === 'warning' ? 'text-ice-lightest' :
-                          'text-ice-light'
+                          issue.type === 'critical' ? 'text-red-400' :
+                          issue.type === 'warning' ? 'text-yellow-400' :
+                          'text-blue-400'
                         }`}>
                           {issue.type === 'critical' ? '⚠' : issue.type === 'warning' ? '⚡' : 'ℹ'} {issue.message}
                         </div>
