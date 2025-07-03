@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { FormData } from '../types';
 import { Upload, FileText, Loader2, Target, TrendingUp, AlertTriangle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { parseFile, validateFileType, getFileTypeLabel } from '../../utils/fileParser';
-import { analyzeJobDescription, ATSAnalysisResult } from '../../utils/atsAnalyzer';
+import { analyzeWithGemini, UIAnalysisResult } from '../../utils/atsAnalyzer';
 import { toast } from 'sonner';
 
 interface ATSAnalysisFormProps {
   formData: FormData;
+  setAnalysisCompleted: (value: boolean) => void;
 }
 
-export const ATSAnalysisForm: React.FC<ATSAnalysisFormProps> = ({ formData }) => {
+export const ATSAnalysisForm: React.FC<ATSAnalysisFormProps> = ({ formData, setAnalysisCompleted }) => {
+
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<ATSAnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<UIAnalysisResult | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [showDetailedView, setShowDetailedView] = useState(false);
 
@@ -35,29 +37,44 @@ export const ATSAnalysisForm: React.FC<ATSAnalysisFormProps> = ({ formData }) =>
     }
   };
 
-  const handleAnalyze = async () => {
-    if (!jobDescription.trim()) {
-      toast.error('Please provide a job description');
-      return;
-    }
+const apiKey = "AIzaSyC6D0f4-yB-JJD54aqhtpJOzU6SGMK4hvk";
+  // Update the handleAnalyze function
+const handleAnalyze = async () => {
+  if (!jobDescription.trim()) {
+    toast.error('Please provide a job description');
+    return;
+  }
 
-    if (!formData.personalInfo.fullName) {
-      toast.error('Please complete your resume before analyzing');
-      return;
-    }
+  if (!formData.personalInfo.fullName) {
+    toast.error('Please complete your resume before analyzing');
+    return;
+  }
 
-    setIsAnalyzing(true);
-    try {
-      const result = await analyzeJobDescription(jobDescription, formData);
-      setAnalysisResult(result);
-      toast.success('ATS analysis completed!');
-    } catch (error) {
-      toast.error('Analysis failed. Please try again.');
-      console.error('Analysis error:', error);
-    } finally {
-      setIsAnalyzing(false);
+  if (!apiKey) {
+    toast.error('API configuration error - please contact support');
+    return;
+  }
+
+  setIsAnalyzing(true);
+  try {
+    const result = await analyzeWithGemini(
+      jobDescription, 
+      formData, 
+      apiKey
+    );
+    setAnalysisResult(result);
+    if (setAnalysisCompleted) {
+      setAnalysisCompleted(true);
     }
-  };
+    toast.success('ATS analysis completed!');
+  } catch (error) {
+    console.error('Analysis error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Analysis failed';
+    toast.error(`${errorMessage}. Please try again.`);
+  } finally {
+    setIsAnalyzing(false);
+  }
+};
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-neon-green';

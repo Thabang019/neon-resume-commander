@@ -19,6 +19,7 @@ interface FormSectionProps {
   onTemplateChange: (template: TemplateType) => void;
   nextStep: () => void;
   prevStep: () => void;
+  setAnalysisCompleted: (value: boolean) => void;
 }
 
 export const FormSection: React.FC<FormSectionProps> = ({
@@ -29,6 +30,7 @@ export const FormSection: React.FC<FormSectionProps> = ({
   onTemplateChange,
   nextStep,
   prevStep,
+  setAnalysisCompleted,
 }) => {
   const renderCurrentForm = () => {
     switch (currentStep) {
@@ -75,10 +77,11 @@ export const FormSection: React.FC<FormSectionProps> = ({
           />
         );
       case 7:
-        return (
-          <ATSAnalysisForm
-            formData={formData}
-          />
+      return (
+        <ATSAnalysisForm
+          formData={formData}
+          setAnalysisCompleted={setAnalysisCompleted}
+        />
         );
       case 8:
         return (

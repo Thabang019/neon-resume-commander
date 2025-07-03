@@ -1,5 +1,76 @@
 import { FormData } from '../components/types';
 
+// Add this interface to atsAnalyzer.ts
+export interface UIAnalysisResult extends Omit<ATSAnalysisResult, 'hardSkillsAnalysis' | 'keywordMatches' | 'formattingCheck'> {
+  hardSkillsAnalysis: {
+    foundSkills: string[];
+    requiredSkills: string[];
+    missingCriticalSkills: string[];
+    skillsScore: number;
+    recommendations: string[];
+  };
+  keywordMatches: {
+    keyword: string;
+    found: boolean;
+    importance: 'high' | 'medium' | 'low';
+    frequency: number;
+    positions: number[];
+  }[];
+  formattingCheck: {
+    score: number;
+    strengths: string[];
+    issues: {
+      message: string;
+      type: 'critical' | 'warning' | 'info';
+    }[];
+    suggestions: string[];
+    fontConsistency: boolean;
+    spacing: boolean;
+    structure: boolean;
+  };
+}
+
+// Define missing interfaces
+export interface KeywordMatch {
+  keyword: string;
+  frequency: number;
+  positions: number[];
+  relevance: 'high' | 'medium' | 'low';
+}
+
+export interface HardSkillsAnalysis {
+  matchedSkills: string[];
+  missingSkills: string[];
+  skillsScore: number;
+  recommendations: string[];
+}
+
+export interface FormattingCheck {
+  score: number;
+  issues: string[];
+  suggestions: string[];
+  fontConsistency: boolean;
+  spacing: boolean;
+  structure: boolean;
+}
+
+export interface ContentEnhancement {
+  actionVerbsUsed: number;
+  quantifiedAchievements: number;
+  industryKeywords: number;
+  readabilityScore: number;
+  suggestions: string[];
+}
+
+export interface Recommendation {
+  priority: 'high' | 'medium' | 'low';
+  category: 'keywords' | 'skills' | 'formatting' | 'content';
+  title: string;
+  description: string;
+  action: string;
+}
+
+// Enhanced interfaces with AI-powered features
 export interface ATSAnalysisResult {
   overallScore: number;
   keywordMatches: KeywordMatch[];
@@ -8,105 +79,32 @@ export interface ATSAnalysisResult {
   formattingCheck: FormattingCheck;
   contentEnhancement: ContentEnhancement;
   recommendations: Recommendation[];
+  aiInsights?: AIInsights; // New AI-powered insights
 }
 
-export interface KeywordMatch {
-  keyword: string;
-  frequency: number;
-  importance: 'high' | 'medium' | 'low';
-  found: boolean;
-  context?: string;
-}
-
-export interface HardSkillsAnalysis {
-  requiredSkills: string[];
-  foundSkills: string[];
-  missingCriticalSkills: string[];
-  certifications: {
-    required: string[];
-    found: string[];
-    missing: string[];
+export interface AIInsights {
+  overallAssessment: string;
+  keyStrengths: string[];
+  criticalGaps: string[];
+  industryAlignment: {
+    score: number;
+    feedback: string;
   };
-}
-
-export interface FormattingCheck {
-  score: number;
-  issues: FormattingIssue[];
-  strengths: string[];
-}
-
-export interface FormattingIssue {
-  type: 'critical' | 'warning' | 'suggestion';
-  message: string;
-  section?: string;
-}
-
-export interface ContentEnhancement {
-  actionVerbs: {
-    suggested: string[];
-    overused: string[];
+  contentQuality: {
+    score: number;
+    feedback: string;
   };
-  quantifiableAchievements: {
-    found: number;
-    suggestions: string[];
-  };
-  genericTerms: string[];
+  competitiveAnalysis: string;
+  tailoredSuggestions: string[];
 }
 
-export interface Recommendation {
-  priority: 'high' | 'medium' | 'low';
-  category: 'keywords' | 'formatting' | 'content' | 'skills';
-  title: string;
-  description: string;
-  action: string;
-}
-
-// Common action verbs categorized by impact
-const STRONG_ACTION_VERBS = [
-  'achieved', 'accelerated', 'accomplished', 'advanced', 'amplified',
-  'boosted', 'built', 'created', 'delivered', 'developed', 'drove',
-  'enhanced', 'established', 'exceeded', 'executed', 'expanded',
-  'generated', 'implemented', 'improved', 'increased', 'initiated',
-  'launched', 'led', 'managed', 'optimized', 'orchestrated',
-  'pioneered', 'produced', 'reduced', 'resolved', 'spearheaded',
-  'streamlined', 'strengthened', 'transformed', 'upgraded'
-];
-
-const WEAK_ACTION_VERBS = [
-  'responsible for', 'worked on', 'helped with', 'assisted',
-  'participated in', 'involved in', 'contributed to'
-];
-
-const GENERIC_TERMS = [
-  'team player', 'hard worker', 'detail-oriented', 'self-motivated',
-  'excellent communication skills', 'fast learner', 'problem solver'
-];
-
-// Technical skills patterns
-const TECHNICAL_SKILL_PATTERNS = [
-  // Programming languages
-  /\b(javascript|python|java|c\+\+|c#|php|ruby|go|rust|swift|kotlin|typescript)\b/gi,
-  // Frameworks
-  /\b(react|angular|vue|node\.?js|express|django|flask|spring|laravel|rails)\b/gi,
-  // Databases
-  /\b(mysql|postgresql|mongodb|redis|elasticsearch|oracle|sql server)\b/gi,
-  // Cloud platforms
-  /\b(aws|azure|gcp|google cloud|docker|kubernetes|terraform)\b/gi,
-  // Tools
-  /\b(git|jenkins|jira|confluence|slack|figma|adobe|photoshop)\b/gi
-];
-
-const CERTIFICATION_PATTERNS = [
-  /\b(aws certified|azure certified|google cloud certified|cissp|cisa|pmp|scrum master|agile)\b/gi,
-  /\b(comptia|cisco|microsoft certified|oracle certified|salesforce certified)\b/gi
-];
-
+// Basic ATS Analyzer implementation
 export class ATSAnalyzer {
   private jobDescription: string;
   private resumeData: FormData;
 
   constructor(jobDescription: string, resumeData: FormData) {
-    this.jobDescription = jobDescription.toLowerCase();
+    this.jobDescription = jobDescription;
     this.resumeData = resumeData;
   }
 
@@ -115,15 +113,9 @@ export class ATSAnalyzer {
     const hardSkillsAnalysis = this.analyzeHardSkills();
     const formattingCheck = this.checkFormatting();
     const contentEnhancement = this.analyzeContent();
-    
-    const overallScore = this.calculateOverallScore(
-      keywordMatches,
-      hardSkillsAnalysis,
-      formattingCheck,
-      contentEnhancement
-    );
+    const recommendations = this.generateRecommendations();
 
-    const recommendations = this.generateRecommendations(
+    const overallScore = this.calculateOverallScore(
       keywordMatches,
       hardSkillsAnalysis,
       formattingCheck,
@@ -133,7 +125,7 @@ export class ATSAnalyzer {
     return {
       overallScore,
       keywordMatches,
-      missingKeywords: keywordMatches.filter(k => !k.found).map(k => k.keyword),
+      missingKeywords: this.findMissingKeywords(),
       hardSkillsAnalysis,
       formattingCheck,
       contentEnhancement,
@@ -143,286 +135,105 @@ export class ATSAnalyzer {
 
   private analyzeKeywords(): KeywordMatch[] {
     const jobKeywords = this.extractKeywords(this.jobDescription);
-    const resumeText = this.getResumeText().toLowerCase();
+    const resumeText = this.getResumeText();
     
-    return jobKeywords.map(keyword => {
-      const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-      const matches = resumeText.match(regex);
-      const frequency = matches ? matches.length : 0;
-      
-      return {
-        keyword,
-        frequency,
-        importance: this.getKeywordImportance(keyword),
-        found: frequency > 0,
-        context: this.getKeywordContext(keyword, resumeText)
-      };
-    });
-  }
-
-  private extractKeywords(text: string): string[] {
-    // Remove common stop words and extract meaningful terms
-    const stopWords = new Set([
-      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-      'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-      'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
-      'should', 'may', 'might', 'must', 'can', 'this', 'that', 'these',
-      'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him',
-      'her', 'us', 'them', 'my', 'your', 'his', 'her', 'its', 'our', 'their'
-    ]);
-
-    const words = text
-      .replace(/[^\w\s]/g, ' ')
-      .split(/\s+/)
-      .filter(word => word.length > 2 && !stopWords.has(word.toLowerCase()));
-
-    // Calculate word frequency
-    const wordFreq: { [key: string]: number } = {};
-    words.forEach(word => {
-      const lowerWord = word.toLowerCase();
-      wordFreq[lowerWord] = (wordFreq[lowerWord] || 0) + 1;
-    });
-
-    // Extract phrases (2-3 words)
-    const phrases: string[] = [];
-    for (let i = 0; i < words.length - 1; i++) {
-      const twoWordPhrase = `${words[i]} ${words[i + 1]}`.toLowerCase();
-      if (!stopWords.has(words[i].toLowerCase()) && !stopWords.has(words[i + 1].toLowerCase())) {
-        phrases.push(twoWordPhrase);
-      }
-      
-      if (i < words.length - 2) {
-        const threeWordPhrase = `${words[i]} ${words[i + 1]} ${words[i + 2]}`.toLowerCase();
-        if (!stopWords.has(words[i].toLowerCase()) && 
-            !stopWords.has(words[i + 1].toLowerCase()) && 
-            !stopWords.has(words[i + 2].toLowerCase())) {
-          phrases.push(threeWordPhrase);
-        }
-      }
-    }
-
-    // Combine single words and phrases, sort by frequency
-    const allTerms = [
-      ...Object.keys(wordFreq).filter(word => wordFreq[word] >= 2),
-      ...phrases
-    ];
-
-    return [...new Set(allTerms)].slice(0, 50); // Top 50 unique terms
-  }
-
-  private getKeywordImportance(keyword: string): 'high' | 'medium' | 'low' {
-    // Technical skills and certifications are high importance
-    if (TECHNICAL_SKILL_PATTERNS.some(pattern => pattern.test(keyword)) ||
-        CERTIFICATION_PATTERNS.some(pattern => pattern.test(keyword))) {
-      return 'high';
-    }
-
-    // Job titles and action verbs are medium importance
-    if (keyword.includes('manager') || keyword.includes('developer') || 
-        keyword.includes('engineer') || keyword.includes('analyst') ||
-        STRONG_ACTION_VERBS.some(verb => keyword.includes(verb))) {
-      return 'medium';
-    }
-
-    return 'low';
-  }
-
-  private getKeywordContext(keyword: string, text: string): string | undefined {
-    const regex = new RegExp(`(.{0,30}\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b.{0,30})`, 'i');
-    const match = text.match(regex);
-    return match ? match[1].trim() : undefined;
+    return jobKeywords.map(keyword => ({
+      keyword,
+      frequency: this.countKeywordFrequency(keyword, resumeText),
+      positions: this.findKeywordPositions(keyword, resumeText),
+      relevance: this.determineKeywordRelevance(keyword)
+    }));
   }
 
   private analyzeHardSkills(): HardSkillsAnalysis {
-    const jobSkills = this.extractTechnicalSkills(this.jobDescription);
-    const resumeText = this.getResumeText().toLowerCase();
-    const resumeSkills = this.resumeData.skills.map(s => s.name.toLowerCase());
+    const jobSkills = this.extractHardSkills(this.jobDescription);
+    const resumeSkills = this.resumeData.skills.map(skill => skill.name.toLowerCase());
     
-    const foundSkills = jobSkills.filter(skill => 
-      resumeText.includes(skill.toLowerCase()) || 
-      resumeSkills.some(rs => rs.includes(skill.toLowerCase()))
+    const matchedSkills = jobSkills.filter(skill => 
+      resumeSkills.some(rSkill => rSkill.includes(skill.toLowerCase()))
     );
-
-    const missingCriticalSkills = jobSkills.filter(skill => 
-      !foundSkills.includes(skill) && this.isCriticalSkill(skill)
-    );
-
-    const jobCertifications = this.extractCertifications(this.jobDescription);
-    const resumeCertifications = this.extractCertifications(this.getResumeText());
     
-    const foundCertifications = jobCertifications.filter(cert =>
-      resumeCertifications.some(rc => rc.toLowerCase().includes(cert.toLowerCase()))
+    const missingSkills = jobSkills.filter(skill => 
+      !resumeSkills.some(rSkill => rSkill.includes(skill.toLowerCase()))
     );
 
     return {
-      requiredSkills: jobSkills,
-      foundSkills,
-      missingCriticalSkills,
-      certifications: {
-        required: jobCertifications,
-        found: foundCertifications,
-        missing: jobCertifications.filter(cert => !foundCertifications.includes(cert))
-      }
+      matchedSkills,
+      missingSkills,
+      skillsScore: (matchedSkills.length / jobSkills.length) * 100,
+      recommendations: this.generateSkillRecommendations(missingSkills)
     };
   }
 
-  private extractTechnicalSkills(text: string): string[] {
-    const skills: string[] = [];
-    
-    TECHNICAL_SKILL_PATTERNS.forEach(pattern => {
-      const matches = text.match(pattern);
-      if (matches) {
-        skills.push(...matches.map(match => match.trim()));
-      }
-    });
-
-    return [...new Set(skills)];
-  }
-
-  private extractCertifications(text: string): string[] {
-    const certifications: string[] = [];
-    
-    CERTIFICATION_PATTERNS.forEach(pattern => {
-      const matches = text.match(pattern);
-      if (matches) {
-        certifications.push(...matches.map(match => match.trim()));
-      }
-    });
-
-    return [...new Set(certifications)];
-  }
-
-  private isCriticalSkill(skill: string): boolean {
-    const criticalKeywords = ['required', 'must have', 'essential', 'mandatory'];
-    const skillContext = this.getKeywordContext(skill, this.jobDescription);
-    
-    return criticalKeywords.some(keyword => 
-      skillContext?.toLowerCase().includes(keyword) || false
-    );
-  }
-
   private checkFormatting(): FormattingCheck {
-    const issues: FormattingIssue[] = [];
-    const strengths: string[] = [];
-    let score = 100;
+    // Basic formatting checks
+    const issues: string[] = [];
+    const suggestions: string[] = [];
 
-    // Check for standard section headers
-    const resumeText = this.getResumeText();
-    const standardSections = ['experience', 'education', 'skills', 'projects'];
-    const foundSections = standardSections.filter(section => 
-      resumeText.toLowerCase().includes(section)
-    );
-
-    if (foundSections.length < 3) {
-      issues.push({
-        type: 'warning',
-        message: 'Missing standard section headers (Experience, Education, Skills)',
-        section: 'structure'
-      });
-      score -= 15;
-    } else {
-      strengths.push('Contains standard ATS-friendly section headers');
+    if (this.resumeData.personalInfo.email && !this.isValidEmail(this.resumeData.personalInfo.email)) {
+      issues.push('Invalid email format');
+      suggestions.push('Use a professional email address');
     }
 
-    // Check for bullet points in experience
-    const hasExperience = this.resumeData.experience.length > 0;
-    if (hasExperience) {
-      const experienceWithBullets = this.resumeData.experience.filter(exp => 
-        exp.description && exp.description.includes('•') || exp.description.includes('-')
-      );
-      
-      if (experienceWithBullets.length === 0) {
-        issues.push({
-          type: 'suggestion',
-          message: 'Consider using bullet points in experience descriptions',
-          section: 'experience'
-        });
-        score -= 5;
-      } else {
-        strengths.push('Uses bullet points for experience descriptions');
-      }
-    }
-
-    // Check for contact information
-    const { personalInfo } = this.resumeData;
-    if (!personalInfo.email || !personalInfo.phone) {
-      issues.push({
-        type: 'critical',
-        message: 'Missing essential contact information (email or phone)',
-        section: 'contact'
-      });
-      score -= 20;
-    } else {
-      strengths.push('Complete contact information provided');
-    }
-
-    // Check for quantifiable achievements
-    const hasQuantifiableAchievements = this.resumeData.experience.some(exp =>
-      exp.description && /\d+/.test(exp.description)
-    );
-
-    if (!hasQuantifiableAchievements) {
-      issues.push({
-        type: 'suggestion',
-        message: 'Add quantifiable achievements (numbers, percentages, metrics)',
-        section: 'experience'
-      });
-      score -= 10;
-    } else {
-      strengths.push('Includes quantifiable achievements');
+    if (this.resumeData.experience.length === 0) {
+      issues.push('No work experience listed');
+      suggestions.push('Add relevant work experience');
     }
 
     return {
-      score: Math.max(0, score),
+      score: Math.max(0, 100 - (issues.length * 20)),
       issues,
-      strengths
+      suggestions,
+      fontConsistency: true,
+      spacing: true,
+      structure: this.resumeData.experience.length > 0
     };
   }
 
   private analyzeContent(): ContentEnhancement {
     const resumeText = this.getResumeText();
-    
-    // Analyze action verbs
-    const usedVerbs = STRONG_ACTION_VERBS.filter(verb => 
+    const actionVerbs = ['achieved', 'managed', 'developed', 'implemented', 'created', 'led'];
+    const actionVerbsUsed = actionVerbs.filter(verb => 
       resumeText.toLowerCase().includes(verb)
-    );
-    
-    const overusedVerbs = usedVerbs.filter(verb => {
-      const count = (resumeText.toLowerCase().match(new RegExp(verb, 'g')) || []).length;
-      return count > 2;
-    });
+    ).length;
 
-    const jobActionVerbs = STRONG_ACTION_VERBS.filter(verb =>
-      this.jobDescription.includes(verb) && !usedVerbs.includes(verb)
-    );
-
-    // Count quantifiable achievements
-    const quantifiableCount = this.resumeData.experience.reduce((count, exp) => {
-      const numbers = exp.description?.match(/\d+/g) || [];
-      return count + numbers.length;
-    }, 0);
-
-    // Find generic terms
-    const foundGenericTerms = GENERIC_TERMS.filter(term =>
-      resumeText.toLowerCase().includes(term.toLowerCase())
-    );
+    const quantifiedAchievements = (resumeText.match(/\d+%|\$\d+|\d+\+/g) || []).length;
+    const industryKeywords = this.countIndustryKeywords(resumeText);
 
     return {
-      actionVerbs: {
-        suggested: jobActionVerbs.slice(0, 10),
-        overused: overusedVerbs
-      },
-      quantifiableAchievements: {
-        found: quantifiableCount,
-        suggestions: [
-          'Add specific numbers (e.g., "Increased sales by 25%")',
-          'Include timeframes (e.g., "Completed project 2 weeks ahead of schedule")',
-          'Mention team sizes (e.g., "Led a team of 8 developers")',
-          'Specify budget amounts (e.g., "Managed $2M budget")'
-        ]
-      },
-      genericTerms: foundGenericTerms
+      actionVerbsUsed,
+      quantifiedAchievements,
+      industryKeywords,
+      readabilityScore: this.calculateReadabilityScore(resumeText),
+      suggestions: this.generateContentSuggestions(actionVerbsUsed, quantifiedAchievements)
     };
+  }
+
+  private generateRecommendations(): Recommendation[] {
+    const recommendations: Recommendation[] = [];
+
+    // Add basic recommendations
+    if (this.resumeData.skills.length < 5) {
+      recommendations.push({
+        priority: 'high',
+        category: 'skills',
+        title: 'Add More Skills',
+        description: 'Your resume has fewer than 5 skills listed',
+        action: 'Add relevant technical and soft skills'
+      });
+    }
+
+    if (this.resumeData.experience.length === 0) {
+      recommendations.push({
+        priority: 'high',
+        category: 'content',
+        title: 'Add Work Experience',
+        description: 'No work experience is listed',
+        action: 'Include relevant work experience and achievements'
+      });
+    }
+
+    return recommendations;
   }
 
   private calculateOverallScore(
@@ -431,112 +242,109 @@ export class ATSAnalyzer {
     formatting: FormattingCheck,
     content: ContentEnhancement
   ): number {
-    // Keyword matching (40% weight)
-    const keywordScore = keywordMatches.length > 0 
-      ? (keywordMatches.filter(k => k.found).length / keywordMatches.length) * 100
-      : 0;
-
-    // Hard skills (30% weight)
-    const skillsScore = hardSkills.requiredSkills.length > 0
-      ? (hardSkills.foundSkills.length / hardSkills.requiredSkills.length) * 100
-      : 100;
-
-    // Formatting (20% weight)
-    const formattingScore = formatting.score;
-
-    // Content quality (10% weight)
-    const contentScore = Math.min(100, 
-      (content.quantifiableAchievements.found * 10) + 
-      (content.actionVerbs.suggested.length > 0 ? 50 : 100) -
-      (content.genericTerms.length * 5)
+    const keywordScore = keywordMatches.length > 0 ? 
+      keywordMatches.reduce((sum, match) => sum + match.frequency, 0) / keywordMatches.length * 20 : 0;
+    
+    return Math.round(
+      (keywordScore + hardSkills.skillsScore + formatting.score + content.readabilityScore) / 4
     );
-
-    const weightedScore = 
-      (keywordScore * 0.4) +
-      (skillsScore * 0.3) +
-      (formattingScore * 0.2) +
-      (contentScore * 0.1);
-
-    return Math.round(Math.max(0, Math.min(100, weightedScore)));
   }
 
-  private generateRecommendations(
-    keywordMatches: KeywordMatch[],
-    hardSkills: HardSkillsAnalysis,
-    formatting: FormattingCheck,
-    content: ContentEnhancement
-  ): Recommendation[] {
-    const recommendations: Recommendation[] = [];
+  private extractKeywords(text: string): string[] {
+    // Simple keyword extraction - in real implementation, use NLP
+    const commonKeywords = text.toLowerCase()
+      .split(/[\s,.-]+/)
+      .filter(word => word.length > 3)
+      .slice(0, 20);
+    
+    return [...new Set(commonKeywords)];
+  }
 
-    // High priority recommendations
-    if (hardSkills.missingCriticalSkills.length > 0) {
-      recommendations.push({
-        priority: 'high',
-        category: 'skills',
-        title: 'Add Critical Missing Skills',
-        description: `${hardSkills.missingCriticalSkills.length} critical skills are missing from your resume`,
-        action: `Add these skills: ${hardSkills.missingCriticalSkills.slice(0, 3).join(', ')}`
-      });
+  private extractHardSkills(text: string): string[] {
+    const skillPatterns = [
+      'JavaScript', 'Python', 'Java', 'React', 'Node.js', 'SQL', 'AWS', 'Docker',
+      'Kubernetes', 'Git', 'TypeScript', 'Vue.js', 'Angular', 'MongoDB', 'PostgreSQL'
+    ];
+    
+    return skillPatterns.filter(skill => 
+      text.toLowerCase().includes(skill.toLowerCase())
+    );
+  }
+
+  private countKeywordFrequency(keyword: string, text: string): number {
+    const regex = new RegExp(keyword, 'gi');
+    return (text.match(regex) || []).length;
+  }
+
+  private findKeywordPositions(keyword: string, text: string): number[] {
+    const positions: number[] = [];
+    const regex = new RegExp(keyword, 'gi');
+    let match;
+    
+    while ((match = regex.exec(text)) !== null) {
+      positions.push(match.index);
     }
+    
+    return positions;
+  }
 
-    const criticalFormattingIssues = formatting.issues.filter(i => i.type === 'critical');
-    if (criticalFormattingIssues.length > 0) {
-      recommendations.push({
-        priority: 'high',
-        category: 'formatting',
-        title: 'Fix Critical Formatting Issues',
-        description: 'Your resume has formatting issues that may prevent ATS systems from reading it properly',
-        action: criticalFormattingIssues[0].message
-      });
+  private determineKeywordRelevance(keyword: string): 'high' | 'medium' | 'low' {
+    // Simple relevance scoring
+    const highRelevanceKeywords = ['experience', 'skills', 'management', 'development'];
+    const mediumRelevanceKeywords = ['knowledge', 'ability', 'understanding'];
+    
+    if (highRelevanceKeywords.some(hrk => keyword.includes(hrk))) return 'high';
+    if (mediumRelevanceKeywords.some(mrk => keyword.includes(mrk))) return 'medium';
+    return 'low';
+  }
+
+  private findMissingKeywords(): string[] {
+    const jobKeywords = this.extractKeywords(this.jobDescription);
+    const resumeText = this.getResumeText().toLowerCase();
+    
+    return jobKeywords.filter(keyword => 
+      !resumeText.includes(keyword.toLowerCase())
+    );
+  }
+
+  private generateSkillRecommendations(missingSkills: string[]): string[] {
+    return missingSkills.slice(0, 5).map(skill => 
+      `Consider adding ${skill} to your skills section`
+    );
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  private countIndustryKeywords(text: string): number {
+    const industryKeywords = ['agile', 'scrum', 'ci/cd', 'devops', 'microservices'];
+    return industryKeywords.filter(keyword => 
+      text.toLowerCase().includes(keyword)
+    ).length;
+  }
+
+  private calculateReadabilityScore(text: string): number {
+    // Simple readability score based on sentence length and word complexity
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const avgSentenceLength = text.split(' ').length / sentences.length;
+    
+    return Math.min(100, Math.max(0, 100 - (avgSentenceLength - 15) * 2));
+  }
+
+  private generateContentSuggestions(actionVerbs: number, quantifiedAchievements: number): string[] {
+    const suggestions: string[] = [];
+    
+    if (actionVerbs < 3) {
+      suggestions.push('Use more action verbs to describe your achievements');
     }
-
-    // Medium priority recommendations
-    const missingHighImportanceKeywords = keywordMatches
-      .filter(k => !k.found && k.importance === 'high')
-      .slice(0, 5);
-
-    if (missingHighImportanceKeywords.length > 0) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'keywords',
-        title: 'Include High-Impact Keywords',
-        description: `${missingHighImportanceKeywords.length} important keywords are missing`,
-        action: `Add keywords: ${missingHighImportanceKeywords.map(k => k.keyword).join(', ')}`
-      });
+    
+    if (quantifiedAchievements < 2) {
+      suggestions.push('Add quantifiable achievements with numbers and percentages');
     }
-
-    if (content.quantifiableAchievements.found < 3) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'content',
-        title: 'Add Quantifiable Achievements',
-        description: 'Include more specific numbers and metrics to demonstrate impact',
-        action: 'Add percentages, dollar amounts, timeframes, or team sizes to your accomplishments'
-      });
-    }
-
-    // Low priority recommendations
-    if (content.actionVerbs.suggested.length > 0) {
-      recommendations.push({
-        priority: 'low',
-        category: 'content',
-        title: 'Use Stronger Action Verbs',
-        description: 'Enhance your resume with more impactful action verbs from the job description',
-        action: `Consider using: ${content.actionVerbs.suggested.slice(0, 5).join(', ')}`
-      });
-    }
-
-    if (content.genericTerms.length > 0) {
-      recommendations.push({
-        priority: 'low',
-        category: 'content',
-        title: 'Replace Generic Terms',
-        description: 'Remove overused phrases and replace with specific examples',
-        action: `Replace terms like: ${content.genericTerms.slice(0, 3).join(', ')}`
-      });
-    }
-
-    return recommendations.slice(0, 5); // Top 5 recommendations
+    
+    return suggestions;
   }
 
   private getResumeText(): string {
@@ -557,10 +365,402 @@ export class ATSAnalyzer {
   }
 }
 
-export const analyzeJobDescription = async (
+// Gemini API service class using fetch
+export class GeminiATSService {
+  private apiKey: string = 'AIzaSyC6D0f4-yB-JJD54aqhtpJOzU6SGMK4hvk'
+  private baseUrl: string = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+
+  private async makeGeminiRequest(prompt: string): Promise<string> {
+    try {
+      const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } catch (error) {
+      console.error('Gemini API request failed:', error);
+      throw error;
+    }
+  }
+
+  async analyzeJobAlignment(jobDescription: string, resumeText: string): Promise<AIInsights> {
+    const prompt = `
+    You are an expert ATS (Applicant Tracking System) and recruitment consultant. 
+    Analyze the alignment between this job description and resume.
+
+    JOB DESCRIPTION:
+    ${jobDescription}
+
+    RESUME CONTENT:
+    ${resumeText}
+
+    Please provide a comprehensive analysis in JSON format with the following structure:
+    {
+      "overallAssessment": "Brief overall assessment of fit",
+      "keyStrengths": ["strength1", "strength2", "strength3"],
+      "criticalGaps": ["gap1", "gap2", "gap3"],
+      "industryAlignment": {
+        "score": 0-100,
+        "feedback": "Detailed feedback on industry alignment"
+      },
+      "contentQuality": {
+        "score": 0-100,
+        "feedback": "Assessment of resume writing quality"
+      },
+      "competitiveAnalysis": "How this resume compares to typical candidates",
+      "tailoredSuggestions": ["suggestion1", "suggestion2", "suggestion3"]
+    }
+
+    Focus on:
+    - Technical skills alignment
+    - Experience relevance
+    - Industry-specific knowledge
+    - Leadership and soft skills
+    - Career progression logic
+    - Achievement quantification
+    `;
+
+    try {
+      const text = await this.makeGeminiRequest(prompt);
+      
+      // Parse JSON response
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      
+      throw new Error('Invalid JSON response from Gemini');
+    } catch (error) {
+      console.error('Gemini API error:', error);
+      return this.getFallbackInsights();
+    }
+  }
+
+  async generateOptimizedContent(
+    originalContent: string, 
+    jobDescription: string, 
+    contentType: 'experience' | 'summary' | 'skills'
+  ): Promise<string> {
+    const prompts = {
+      experience: `
+        Rewrite this work experience bullet point to better match the job requirements.
+        Make it more ATS-friendly with relevant keywords and quantifiable achievements.
+        
+        Original: ${originalContent}
+        Job Description: ${jobDescription}
+        
+        Return only the improved bullet point:
+      `,
+      summary: `
+        Create a professional summary that aligns with this job description.
+        Include relevant keywords and highlight matching qualifications.
+        
+        Current summary: ${originalContent}
+        Job Description: ${jobDescription}
+        
+        Return only the improved summary (2-3 sentences):
+      `,
+      skills: `
+        Suggest additional technical skills to add based on the job description.
+        Only suggest skills that are reasonable for someone with this background.
+        
+        Current skills: ${originalContent}
+        Job Description: ${jobDescription}
+        
+        Return comma-separated list of suggested skills:
+      `
+    };
+
+    try {
+      const text = await this.makeGeminiRequest(prompts[contentType]);
+      return text.trim();
+    } catch (error) {
+      console.error('Gemini content generation error:', error);
+      return originalContent;
+    }
+  }
+
+  async analyzeKeywordGaps(jobDescription: string, resumeText: string): Promise<{
+    missingKeywords: string[];
+    keywordSuggestions: { [key: string]: string[] };
+  }> {
+    const prompt = `
+    Extract important keywords and phrases from this job description that are missing from the resume.
+    Focus on technical skills, tools, methodologies, and industry-specific terms.
+
+    Job Description: ${jobDescription}
+    Resume: ${resumeText}
+
+    Return JSON format:
+    {
+      "missingKeywords": ["keyword1", "keyword2"],
+      "keywordSuggestions": {
+        "technical_skills": ["skill1", "skill2"],
+        "tools_technologies": ["tool1", "tool2"],
+        "methodologies": ["method1", "method2"],
+        "certifications": ["cert1", "cert2"]
+      }
+    }
+    `;
+
+    try {
+      const text = await this.makeGeminiRequest(prompt);
+      
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      
+      return {
+        missingKeywords: [],
+        keywordSuggestions: {}
+      };
+    } catch (error) {
+      console.error('Keyword analysis error:', error);
+      return {
+        missingKeywords: [],
+        keywordSuggestions: {}
+      };
+    }
+  }
+
+  private getFallbackInsights(): AIInsights {
+    return {
+      overallAssessment: "Unable to generate AI insights at this time",
+      keyStrengths: [],
+      criticalGaps: [],
+      industryAlignment: {
+        score: 0,
+        feedback: "AI analysis unavailable"
+      },
+      contentQuality: {
+        score: 0,
+        feedback: "AI analysis unavailable"
+      },
+      competitiveAnalysis: "Analysis unavailable",
+      tailoredSuggestions: []
+    };
+  }
+}
+
+// Enhanced ATS Analyzer with Gemini integration
+export class EnhancedATSAnalyzer {
+  private jobDescription: string;
+  private resumeData: FormData;
+  private geminiService: GeminiATSService;
+  private originalAnalyzer: ATSAnalyzer;
+
+  constructor(jobDescription: string, resumeData: FormData, apiKey: string) {
+    this.jobDescription = jobDescription;
+    this.resumeData = resumeData;
+    this.geminiService = new GeminiATSService(apiKey);
+    this.originalAnalyzer = new ATSAnalyzer(jobDescription, resumeData);
+  }
+
+  public async analyze(): Promise<ATSAnalysisResult> {
+    // Get base analysis
+    const baseAnalysis = this.originalAnalyzer.analyze();
+    
+    // Get AI-enhanced insights
+    const resumeText = this.getResumeText();
+    const aiInsights = await this.geminiService.analyzeJobAlignment(
+      this.jobDescription, 
+      resumeText
+    );
+
+    // Enhance keyword analysis with AI
+    const keywordGaps = await this.geminiService.analyzeKeywordGaps(
+      this.jobDescription,
+      resumeText
+    );
+
+    // Merge AI insights with base analysis
+    const enhancedRecommendations = [
+      ...baseAnalysis.recommendations,
+      ...this.generateAIRecommendations(aiInsights, keywordGaps)
+    ];
+
+    return {
+      ...baseAnalysis,
+      aiInsights,
+      missingKeywords: [...baseAnalysis.missingKeywords, ...keywordGaps.missingKeywords],
+      recommendations: enhancedRecommendations.slice(0, 8) // Top 8 recommendations
+    };
+  }
+
+  public async optimizeContent(
+    content: string, 
+    type: 'experience' | 'summary' | 'skills'
+  ): Promise<string> {
+    return await this.geminiService.generateOptimizedContent(
+      content, 
+      this.jobDescription, 
+      type
+    );
+  }
+
+  private generateAIRecommendations(
+    aiInsights: AIInsights, 
+    keywordGaps: { missingKeywords: string[] }
+  ): Recommendation[] {
+    const recommendations: Recommendation[] = [];
+
+    // Critical gaps from AI analysis
+    if (aiInsights.criticalGaps.length > 0) {
+      recommendations.push({
+        priority: 'high',
+        category: 'skills',
+        title: 'Address Critical Skill Gaps',
+        description: 'AI analysis identified critical gaps in your qualifications',
+        action: `Focus on: ${aiInsights.criticalGaps.slice(0, 2).join(', ')}`
+      });
+    }
+
+    // Industry alignment improvements
+    if (aiInsights.industryAlignment.score < 70) {
+      recommendations.push({
+        priority: 'medium',
+        category: 'content',
+        title: 'Improve Industry Alignment',
+        description: aiInsights.industryAlignment.feedback,
+        action: 'Highlight relevant industry experience and use industry-specific terminology'
+      });
+    }
+
+    // Content quality improvements
+    if (aiInsights.contentQuality.score < 70) {
+      recommendations.push({
+        priority: 'medium',
+        category: 'content',
+        title: 'Enhance Content Quality',
+        description: aiInsights.contentQuality.feedback,
+        action: 'Improve writing quality and professional presentation'
+      });
+    }
+
+    // AI-suggested improvements
+    if (aiInsights.tailoredSuggestions.length > 0) {
+      recommendations.push({
+        priority: 'low',
+        category: 'content',
+        title: 'AI-Suggested Improvements',
+        description: 'Personalized suggestions based on job requirements',
+        action: aiInsights.tailoredSuggestions[0]
+      });
+    }
+
+    return recommendations;
+  }
+
+  private getResumeText(): string {
+    const { personalInfo, experience, education, skills, projects } = this.resumeData;
+    
+    const sections = [
+      personalInfo.fullName,
+      personalInfo.email,
+      personalInfo.phone,
+      personalInfo.location,
+      ...experience.map(exp => `${exp.position} ${exp.company} ${exp.description}`),
+      ...education.map(edu => `${edu.degree} ${edu.field} ${edu.institution}`),
+      ...skills.map(skill => `${skill.name} ${skill.level}`),
+      ...projects.map(proj => `${proj.name} ${proj.description} ${proj.technologies}`)
+    ];
+
+    return sections.filter(Boolean).join(' ');
+  }
+}
+
+// Usage example
+export const analyzeWithGemini = async (
   jobDescription: string,
-  resumeData: FormData
-): Promise<ATSAnalysisResult> => {
-  const analyzer = new ATSAnalyzer(jobDescription, resumeData);
-  return analyzer.analyze();
+  resumeData: FormData,
+  geminiApiKey: string
+): Promise<UIAnalysisResult> => {
+  const enhancedAnalyzer = new EnhancedATSAnalyzer(
+    jobDescription, 
+    resumeData, 
+    geminiApiKey
+  );
+  
+  const result = await enhancedAnalyzer.analyze();
+  // Transform to UI-compatible format
+  return {
+    ...result,
+    hardSkillsAnalysis: {
+      foundSkills: result.hardSkillsAnalysis.matchedSkills,
+      requiredSkills: [...result.hardSkillsAnalysis.matchedSkills, ...result.hardSkillsAnalysis.missingSkills],
+      missingCriticalSkills: result.hardSkillsAnalysis.missingSkills,
+      skillsScore: result.hardSkillsAnalysis.skillsScore,
+      recommendations: result.hardSkillsAnalysis.recommendations
+    },
+    keywordMatches: result.keywordMatches.map(match => ({
+      ...match,
+      found: match.frequency > 0,
+      importance: match.relevance
+    })),
+    formattingCheck: {
+      ...result.formattingCheck,
+      strengths: result.formattingCheck.suggestions.filter(s => !s.toLowerCase().includes('consider')),
+      issues: result.formattingCheck.issues.map(issue => ({
+        message: issue,
+        type: issue.toLowerCase().includes('critical') ? 'critical' : 
+              issue.toLowerCase().includes('suggestion') ? 'info' : 'warning'
+      })),
+      suggestions: result.formattingCheck.suggestions
+    }
+  };
+};
+
+// Content optimization helper
+export const optimizeResumeContent = async (
+  jobDescription: string,
+  resumeData: FormData,
+  geminiApiKey: string
+): Promise<{
+  optimizedExperience: string[];
+  optimizedSummary?: string;
+  suggestedSkills: string[];
+}> => {
+  const analyzer = new EnhancedATSAnalyzer(
+    jobDescription, 
+    resumeData, 
+    geminiApiKey
+  );
+
+  const optimizedExperience = await Promise.all(
+    resumeData.experience.map(exp => 
+      analyzer.optimizeContent(exp.description || '', 'experience')
+    )
+  );
+
+  const currentSkills = resumeData.skills.map(s => s.name).join(', ');
+  const suggestedSkillsText = await analyzer.optimizeContent(
+    currentSkills, 
+    'skills'
+  );
+  const suggestedSkills = suggestedSkillsText.split(',').map(s => s.trim());
+
+  return {
+    optimizedExperience,
+    suggestedSkills
+  };
 };

@@ -25,6 +25,7 @@ export const ResumeBuilder: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>('classic');
+  const [analysisCompleted, setAnalysisCompleted] = useState(false);
 
   const updateFormData = (section: keyof FormData, data: any) => {
     setFormData(prev => ({
@@ -34,20 +35,31 @@ export const ResumeBuilder: React.FC = () => {
   };
 
   const nextStep = () => {
+    if (currentStep === 7) {
+      setAnalysisCompleted(false);
+    }
     if (currentStep < 8) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const prevStep = () => {
+    if (currentStep === 7) {
+      setAnalysisCompleted(false);
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
+
   const goToStep = (step: number) => {
+    if (step !== 7) {
+      setAnalysisCompleted(false);
+    }
     setCurrentStep(step);
   };
+
 
   const handleTemplateChange = (template: TemplateType) => {
     setSelectedTemplate(template);
@@ -77,12 +89,13 @@ export const ResumeBuilder: React.FC = () => {
               onTemplateChange={handleTemplateChange}
               nextStep={nextStep}
               prevStep={prevStep}
+              setAnalysisCompleted={setAnalysisCompleted}
             />
           </div>
 
           {/* Preview Section */}
           <div className="glass-panel p-6 animate-slide-in-right">
-            {currentStep === 7 ? (
+            {currentStep === 7 && !analysisCompleted ? (
               <div className="text-center py-16">
                 <div className="text-lg mb-2 text-cyber-blue glow-text">ATS Analysis in Progress</div>
                 <div className="text-sm text-muted-foreground font-mono">
@@ -90,8 +103,8 @@ export const ResumeBuilder: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <ResumePreview 
-                formData={formData} 
+              <ResumePreview
+                formData={formData}
                 selectedTemplate={selectedTemplate}
               />
             )}
