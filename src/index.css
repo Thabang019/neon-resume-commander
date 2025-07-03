@@ -9,11 +9,11 @@
     --background: 240 249 248; /* #F0FBFA - lightest ice */
     --foreground: 32 48 56; /* #203038 - darkest for text */
 
-    --card: 203 228 237; /* #CBE4ED - light ice for cards */
-    --card-foreground: 32 48 56; /* #203038 - darkest for text */
+    --card: 87 128 152; /* #578098 - darker ice for cards */
+    --card-foreground: 240 249 248; /* #F0FBFA - lightest for contrast */
 
-    --popover: 203 228 237; /* #CBE4ED - light ice */
-    --popover-foreground: 32 48 56; /* #203038 - darkest for text */
+    --popover: 87 128 152; /* #578098 - darker ice */
+    --popover-foreground: 240 249 248; /* #F0FBFA - lightest for contrast */
 
     --primary: 87 173 198; /* #57ADC6 - medium ice */
     --primary-foreground: 32 48 56; /* #203038 - darkest */
@@ -21,8 +21,8 @@
     --secondary: 135 173 198; /* #87ADC6 - medium ice */
     --secondary-foreground: 32 48 56; /* #203038 - darkest */
 
-    --muted: 203 228 237; /* #CBE4ED - light ice */
-    --muted-foreground: 32 48 56; /* Changed to darkest ice for better visibility */
+    --muted: 87 128 152; /* #578098 - darker ice for better contrast */
+    --muted-foreground: 240 249 248; /* #F0FBFA - lightest for maximum contrast */
 
     --accent: 87 128 152; /* #578098 - medium dark ice */
     --accent-foreground: 240 249 248; /* #F0FBFA - lightest */
@@ -53,7 +53,7 @@
   }
 
   body {
-    @apply bg-ice-lightest text-foreground font-mono;
+    @apply bg-ice-lightest text-ice-darkest font-mono;
     background: linear-gradient(-45deg, #F0FBFA, #CBE4ED, #87ADC6, #F0FBFA);
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;
@@ -80,8 +80,22 @@
 
 @layer components {
   .cyber-card {
-    @apply bg-ice-light/60 backdrop-blur-lg border border-ice-medium/40 rounded-lg p-6;
-    box-shadow: 0 8px 32px rgba(135, 173, 198, 0.15);
+    @apply bg-ice-dark/90 backdrop-blur-lg border border-ice-darkest/60 rounded-lg p-6;
+    box-shadow: 0 8px 32px rgba(32, 48, 56, 0.25);
+    color: #F0FBFA; /* Force light text on dark cards */
+  }
+
+  .cyber-card h3,
+  .cyber-card h4,
+  .cyber-card .text-lg,
+  .cyber-card .font-semibold {
+    @apply text-ice-lightest;
+  }
+
+  .cyber-card p,
+  .cyber-card span,
+  .cyber-card div {
+    @apply text-ice-lightest;
   }
 
   .neon-border {
@@ -94,12 +108,12 @@
   }
 
   .glass-panel {
-    @apply bg-ice-lightest/80 backdrop-blur-md border border-ice-medium/20 rounded-xl;
-    box-shadow: 0 8px 32px rgba(87, 128, 152, 0.1);
+    @apply bg-ice-lightest/90 backdrop-blur-md border border-ice-medium/30 rounded-xl;
+    box-shadow: 0 8px 32px rgba(87, 128, 152, 0.15);
   }
 
   .neon-input {
-    @apply bg-ice-lightest/70 border-ice-medium/40 text-ice-darkest placeholder:text-ice-dark;
+    @apply bg-ice-lightest/90 border-ice-medium/50 text-ice-darkest placeholder:text-ice-dark;
     transition: all 0.3s ease;
   }
 
@@ -119,7 +133,7 @@
   }
 
   .cyber-button-secondary {
-    @apply border-2 border-dashed border-ice-medium/40 rounded-lg p-6 text-ice-dark hover:border-ice-medium/60 hover:bg-ice-medium/10 transition-all duration-300;
+    @apply border-2 border-dashed border-ice-medium/40 rounded-lg p-6 text-ice-darkest hover:border-ice-medium/60 hover:bg-ice-medium/10 transition-all duration-300;
   }
 
   .cyber-input-group {
@@ -127,7 +141,7 @@
   }
 
   .cyber-label {
-    @apply flex items-center gap-2 text-sm font-medium text-ice-darkest;
+    @apply flex items-center gap-2 text-sm font-medium text-ice-lightest;
   }
 
   .cyber-input {
@@ -155,14 +169,14 @@
     pointer-events: none;
   }
 
-  /* Ensure all text elements have proper contrast */
+  /* Force all text elements to have proper contrast */
   .text-muted-foreground {
-    @apply text-ice-darkest;
+    @apply text-ice-lightest !important;
   }
 
   /* Secondary text that needs to be slightly lighter but still visible */
   .text-secondary-muted {
-    @apply text-ice-dark;
+    @apply text-ice-light;
   }
 
   /* Placeholder text styling */
@@ -176,22 +190,22 @@
   .text-orange-400,
   .text-orange-500,
   .text-orange-600 {
-    @apply text-ice-dark;
+    @apply text-ice-lightest;
   }
 
   .text-yellow-800,
   .text-orange-800 {
-    @apply text-ice-darkest;
+    @apply text-ice-lightest;
   }
 
   .bg-yellow-50,
   .bg-orange-50 {
-    @apply bg-ice-lightest;
+    @apply bg-ice-dark;
   }
 
   .bg-yellow-100,
   .bg-orange-100 {
-    @apply bg-ice-light;
+    @apply bg-ice-dark;
   }
 
   .border-yellow-200,
@@ -201,11 +215,23 @@
 
   .from-yellow-400,
   .from-orange-400 {
-    @apply from-ice-dark;
+    @apply from-ice-medium;
   }
 
   .to-orange-400,
   .to-orange-500 {
     @apply to-ice-darkest;
+  }
+
+  /* Ensure all card content is visible */
+  .cyber-card .text-sm,
+  .cyber-card .text-xs {
+    @apply text-ice-lightest;
+  }
+
+  /* Override specific text colors in cards */
+  .cyber-card .text-ice-darkest,
+  .cyber-card .text-ice-dark {
+    @apply text-ice-lightest !important;
   }
 }
