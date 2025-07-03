@@ -78,21 +78,21 @@ const handleAnalyze = async () => {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-ice-medium';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-500';
+    if (score >= 60) return 'text-ice-dark';
+    return 'text-red-700';
   };
 
   const getScoreBackground = (score: number) => {
     if (score >= 80) return 'from-ice-medium to-ice-dark';
-    if (score >= 60) return 'from-yellow-500 to-orange-500';
-    return 'from-red-500 to-red-600';
+    if (score >= 60) return 'from-ice-dark to-ice-darkest';
+    return 'from-red-600 to-red-700';
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-700 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-800 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-ice-darkest bg-ice-light border-ice-medium';
+      case 'high': return 'text-red-800 bg-red-50 border-red-300';
+      case 'medium': return 'text-ice-darkest bg-ice-light border-ice-medium';
+      case 'low': return 'text-ice-darkest bg-ice-lightest border-ice-light';
       default: return 'text-ice-darkest bg-ice-light border-ice-medium';
     }
   };
@@ -292,12 +292,12 @@ const handleAnalyze = async () => {
                       <div className="flex items-center gap-2">
                         <span className={`text-xs px-2 py-1 rounded ${
                           keyword.importance === 'high' ? 'bg-red-100 text-red-800' :
-                          keyword.importance === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-ice-light text-ice-darkest'
+                          keyword.importance === 'medium' ? 'bg-ice-light text-ice-darkest border border-ice-medium' :
+                          'bg-ice-lightest text-ice-darkest border border-ice-light'
                         }`}>
                           {keyword.importance}
                         </span>
-                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-ice-medium' : 'bg-red-400'}`} />
+                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-ice-medium' : 'bg-red-500'}`} />
                       </div>
                     </div>
                   ))}
@@ -321,10 +321,10 @@ const handleAnalyze = async () => {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-red-700 mb-2">Missing Critical Skills</h4>
+                    <h4 className="text-sm font-semibold text-red-800 mb-2">Missing Critical Skills</h4>
                     <div className="space-y-1">
                       {analysisResult.hardSkillsAnalysis.missingCriticalSkills.map((skill, index) => (
-                        <div key={index} className="text-sm font-mono text-red-700">
+                        <div key={index} className="text-sm font-mono text-red-800">
                           ✗ {skill}
                         </div>
                       ))}
@@ -350,13 +350,13 @@ const handleAnalyze = async () => {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-yellow-800 mb-2">Issues</h4>
+                    <h4 className="text-sm font-semibold text-ice-darkest mb-2">Issues</h4>
                     <div className="space-y-1">
                       {analysisResult.formattingCheck.issues.map((issue, index) => (
                         <div key={index} className={`text-sm ${
-                          issue.type === 'critical' ? 'text-red-700' :
-                          issue.type === 'warning' ? 'text-yellow-800' :
-                          'text-ice-darkest'
+                          issue.type === 'critical' ? 'text-red-800' :
+                          issue.type === 'warning' ? 'text-ice-darkest' :
+                          'text-ice-dark'
                         }`}>
                           {issue.type === 'critical' ? '⚠' : issue.type === 'warning' ? '⚡' : 'ℹ'} {issue.message}
                         </div>

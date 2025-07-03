@@ -27,7 +27,7 @@
     --accent: 87 128 152; /* #578098 - medium dark ice */
     --accent-foreground: 240 249 248; /* #F0FBFA - lightest */
 
-    --destructive: 220 38 38; /* Keep red for errors */
+    --destructive: 185 28 28; /* Darker red for better contrast */
     --destructive-foreground: 240 249 248; /* #F0FBFA - lightest */
 
     --border: 135 173 198; /* #87ADC6 - medium ice */
@@ -168,5 +168,44 @@
   /* Placeholder text styling */
   ::placeholder {
     @apply text-ice-dark opacity-70;
+  }
+
+  /* Override any remaining orange/yellow colors with ice palette */
+  .text-yellow-400,
+  .text-yellow-600,
+  .text-orange-400,
+  .text-orange-500,
+  .text-orange-600 {
+    @apply text-ice-dark;
+  }
+
+  .text-yellow-800,
+  .text-orange-800 {
+    @apply text-ice-darkest;
+  }
+
+  .bg-yellow-50,
+  .bg-orange-50 {
+    @apply bg-ice-lightest;
+  }
+
+  .bg-yellow-100,
+  .bg-orange-100 {
+    @apply bg-ice-light;
+  }
+
+  .border-yellow-200,
+  .border-orange-200 {
+    @apply border-ice-medium;
+  }
+
+  .from-yellow-400,
+  .from-orange-400 {
+    @apply from-ice-dark;
+  }
+
+  .to-orange-400,
+  .to-orange-500 {
+    @apply to-ice-darkest;
   }
 }
