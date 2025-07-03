@@ -22,7 +22,7 @@
     --secondary-foreground: 32 48 56; /* #203038 - darkest */
 
     --muted: 203 228 237; /* #CBE4ED - light ice */
-    --muted-foreground: 87 128 152; /* #578098 - medium dark */
+    --muted-foreground: 32 48 56; /* Changed to darkest ice for better visibility */
 
     --accent: 87 128 152; /* #578098 - medium dark ice */
     --accent-foreground: 240 249 248; /* #F0FBFA - lightest */
@@ -127,7 +127,7 @@
   }
 
   .cyber-label {
-    @apply flex items-center gap-2 text-sm font-medium text-ice-dark;
+    @apply flex items-center gap-2 text-sm font-medium text-ice-darkest;
   }
 
   .cyber-input {
@@ -153,5 +153,20 @@
       rgba(135, 173, 198, 0.03) 4px
     );
     pointer-events: none;
+  }
+
+  /* Ensure all text elements have proper contrast */
+  .text-muted-foreground {
+    @apply text-ice-darkest;
+  }
+
+  /* Secondary text that needs to be slightly lighter but still visible */
+  .text-secondary-muted {
+    @apply text-ice-dark;
+  }
+
+  /* Placeholder text styling */
+  ::placeholder {
+    @apply text-ice-dark opacity-70;
   }
 }

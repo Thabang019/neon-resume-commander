@@ -10,16 +10,16 @@ export const Header: React.FC = () => {
             <Terminal className="w-6 h-6 text-ice-dark" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-ice-dark glow-text">
+            <h1 className="text-2xl font-bold text-ice-darkest glow-text">
               NEON RESUME COMMANDER
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-ice-darkest">
               // Initializing futuristic resume generation protocol...
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 text-ice-dark">
+        <div className="flex items-center gap-2 text-ice-darkest">
           <Zap className="w-4 h-4 animate-pulse" />
           <span className="text-sm font-mono">SYSTEM ONLINE</span>
         </div>

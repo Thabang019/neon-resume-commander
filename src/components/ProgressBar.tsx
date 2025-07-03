@@ -23,10 +23,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className="glass-panel p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-ice-dark glow-text">
+        <h2 className="text-lg font-semibold text-ice-darkest glow-text">
           PROGRESS TRACKER
         </h2>
-        <span className="text-sm text-muted-foreground font-mono">
+        <span className="text-sm text-ice-darkest font-mono">
           {currentStep}/{totalSteps} MODULES COMPLETE
         </span>
       </div>
@@ -47,8 +47,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     ${isCompleted 
                       ? 'bg-ice-medium border-ice-medium text-ice-lightest animate-glow-pulse' 
                       : isCurrent 
-                        ? 'bg-ice-light border-ice-dark text-ice-dark animate-glow-pulse' 
-                        : 'border-muted bg-muted/20 text-muted-foreground'
+                        ? 'bg-ice-light border-ice-darkest text-ice-darkest animate-glow-pulse' 
+                        : 'border-ice-dark bg-ice-light text-ice-dark'
                     }
                     ${isClickable && onStepClick 
                       ? 'cursor-pointer hover:scale-110 hover:brightness-110' 
@@ -63,7 +63,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     <span className="text-sm font-mono">{stepNumber}</span>
                   )}
                 </div>
-                <span className="text-xs mt-2 font-mono text-center max-w-16">
+                <span className="text-xs mt-2 font-mono text-center max-w-16 text-ice-darkest">
                   {stepLabels[index]}
                 </span>
               </div>
@@ -74,7 +74,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     flex-1 h-0.5 mx-4 transition-all duration-500
                     ${stepNumber < currentStep 
                       ? 'bg-gradient-to-r from-ice-medium to-ice-dark' 
-                      : 'bg-muted/30'
+                      : 'bg-ice-dark/30'
                     }
                   `}
                 />
