@@ -23,7 +23,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className="glass-panel p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-cyber-blue glow-text">
+        <h2 className="text-lg font-semibold text-ice-dark glow-text">
           PROGRESS TRACKER
         </h2>
         <span className="text-sm text-muted-foreground font-mono">
@@ -45,9 +45,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                   className={`
                     w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300
                     ${isCompleted 
-                      ? 'bg-neon-green border-neon-green text-space-dark animate-glow-pulse' 
+                      ? 'bg-ice-medium border-ice-medium text-ice-lightest animate-glow-pulse' 
                       : isCurrent 
-                        ? 'bg-cyber-blue/20 border-cyber-blue text-cyber-blue animate-glow-pulse' 
+                        ? 'bg-ice-light border-ice-dark text-ice-dark animate-glow-pulse' 
                         : 'border-muted bg-muted/20 text-muted-foreground'
                     }
                     ${isClickable && onStepClick 
@@ -73,7 +73,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                   className={`
                     flex-1 h-0.5 mx-4 transition-all duration-500
                     ${stepNumber < currentStep 
-                      ? 'bg-gradient-to-r from-neon-green to-cyber-blue' 
+                      ? 'bg-gradient-to-r from-ice-medium to-ice-dark' 
                       : 'bg-muted/30'
                     }
                   `}

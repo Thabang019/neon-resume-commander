@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,22 +62,28 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Futuristic color palette
-				'cyber-blue': '#00D4FF',
-				'neon-pink': '#FF006E',
-				'space-dark': '#0B1426',
-				'space-blue': '#1E3A8A',
-				'deep-purple': '#312E81',
-				'electric-purple': '#8B5CF6',
-				'neon-green': '#00FF88',
+				// Ice palette colors
+				'ice-lightest': '#F0FBFA',
+				'ice-light': '#CBE4ED',
+				'ice-medium': '#87ADC6',
+				'ice-dark': '#578098',
+				'ice-darkest': '#203038',
+				// Legacy colors for compatibility
+				'cyber-blue': '#87ADC6',
+				'neon-pink': '#578098',
+				'space-dark': '#203038',
+				'space-blue': '#87ADC6',
+				'deep-purple': '#578098',
+				'electric-purple': '#87ADC6',
+				'neon-green': '#87ADC6',
 			},
 			fontFamily: {
 				mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'monospace'],
 			},
 			backgroundImage: {
-				'cyber-gradient': 'linear-gradient(135deg, #0B1426 0%, #1E3A8A 50%, #312E81 100%)',
-				'neon-gradient': 'linear-gradient(135deg, #00D4FF 0%, #FF006E 50%, #8B5CF6 100%)',
-				'animated-gradient': 'linear-gradient(-45deg, #0B1426, #1E3A8A, #312E81, #00D4FF)',
+				'cyber-gradient': 'linear-gradient(135deg, #F0FBFA 0%, #CBE4ED 50%, #87ADC6 100%)',
+				'neon-gradient': 'linear-gradient(135deg, #87ADC6 0%, #578098 50%, #203038 100%)',
+				'animated-gradient': 'linear-gradient(-45deg, #F0FBFA, #CBE4ED, #87ADC6, #578098)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -104,10 +109,10 @@ export default {
 				},
 				'glow-pulse': {
 					'0%, 100%': {
-						boxShadow: '0 0 5px #00D4FF, 0 0 10px #00D4FF, 0 0 15px #00D4FF',
+						boxShadow: '0 0 5px #87ADC6, 0 0 10px #87ADC6, 0 0 15px #87ADC6',
 					},
 					'50%': {
-						boxShadow: '0 0 10px #00D4FF, 0 0 20px #00D4FF, 0 0 30px #00D4FF',
+						boxShadow: '0 0 10px #87ADC6, 0 0 20px #87ADC6, 0 0 30px #87ADC6',
 					}
 				},
 				'gradient-shift': {

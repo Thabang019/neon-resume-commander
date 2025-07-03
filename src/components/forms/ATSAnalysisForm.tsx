@@ -77,30 +77,30 @@ const handleAnalyze = async () => {
 };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-neon-green';
-    if (score >= 60) return 'text-yellow-400';
-    return 'text-red-400';
+    if (score >= 80) return 'text-ice-medium';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-500';
   };
 
   const getScoreBackground = (score: number) => {
-    if (score >= 80) return 'from-neon-green to-green-400';
-    if (score >= 60) return 'from-yellow-400 to-orange-400';
-    return 'from-red-400 to-red-600';
+    if (score >= 80) return 'from-ice-medium to-ice-dark';
+    if (score >= 60) return 'from-yellow-500 to-orange-500';
+    return 'from-red-500 to-red-600';
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-400 bg-red-400/10 border-red-400/30';
-      case 'medium': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30';
-      case 'low': return 'text-blue-400 bg-blue-400/10 border-blue-400/30';
-      default: return 'text-gray-400 bg-gray-400/10 border-gray-400/30';
+      case 'high': return 'text-red-600 bg-red-50 border-red-200';
+      case 'medium': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
+      case 'low': return 'text-ice-dark bg-ice-light border-ice-medium';
+      default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-cyber-blue glow-text mb-2">
+        <h2 className="text-2xl font-bold text-ice-dark glow-text mb-2">
           ATS COMPATIBILITY ANALYSIS
         </h2>
         <p className="text-muted-foreground font-mono text-sm">
@@ -110,7 +110,7 @@ const handleAnalyze = async () => {
 
       {/* Job Description Input */}
       <div className="cyber-card space-y-4">
-        <h3 className="text-lg font-semibold text-neon-pink font-mono">
+        <h3 className="text-lg font-semibold text-ice-dark font-mono">
           JOB DESCRIPTION INPUT
         </h3>
         
@@ -128,9 +128,9 @@ const handleAnalyze = async () => {
                 onChange={handleFileUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="cyber-input flex items-center justify-center py-8 border-2 border-dashed border-cyber-blue/30 hover:border-cyber-blue/50 transition-colors">
+              <div className="cyber-input flex items-center justify-center py-8 border-2 border-dashed border-ice-medium/30 hover:border-ice-medium/50 transition-colors">
                 <div className="text-center">
-                  <Upload className="w-8 h-8 text-cyber-blue mx-auto mb-2" />
+                  <Upload className="w-8 h-8 text-ice-medium mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">
                     {uploadedFile ? uploadedFile.name : 'Drop PDF, DOCX, or TXT file here'}
                   </p>
@@ -183,12 +183,12 @@ const handleAnalyze = async () => {
           {/* Overall Score */}
           <div className="cyber-card text-center">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-neon-pink font-mono">
+              <h3 className="text-lg font-semibold text-ice-dark font-mono">
                 COMPATIBILITY SCORE
               </h3>
               <button
                 onClick={() => setShowDetailedView(!showDetailedView)}
-                className="flex items-center gap-2 text-cyber-blue hover:text-neon-pink transition-colors"
+                className="flex items-center gap-2 text-ice-medium hover:text-ice-dark transition-colors"
               >
                 {showDetailedView ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 {showDetailedView ? 'Quick View' : 'Detailed View'}
@@ -196,8 +196,8 @@ const handleAnalyze = async () => {
             </div>
             
             <div className="relative w-32 h-32 mx-auto mb-4">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-space-blue to-deep-purple"></div>
-              <div className="absolute inset-2 rounded-full bg-space-dark flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ice-light to-ice-medium"></div>
+              <div className="absolute inset-2 rounded-full bg-ice-lightest flex items-center justify-center">
                 <div className="text-center">
                   <div className={`text-3xl font-bold ${getScoreColor(analysisResult.overallScore)}`}>
                     {analysisResult.overallScore}%
@@ -207,7 +207,7 @@ const handleAnalyze = async () => {
               </div>
             </div>
 
-            <div className="w-full bg-space-blue/30 rounded-full h-3 mb-4">
+            <div className="w-full bg-ice-light rounded-full h-3 mb-4">
               <div 
                 className={`bg-gradient-to-r ${getScoreBackground(analysisResult.overallScore)} h-3 rounded-full transition-all duration-1000 animate-glow-pulse`}
                 style={{ width: `${analysisResult.overallScore}%` }}
@@ -225,21 +225,21 @@ const handleAnalyze = async () => {
           {!showDetailedView && (
             <div className="grid md:grid-cols-3 gap-4">
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-cyber-blue mb-2">
+                <div className="text-2xl font-bold text-ice-medium mb-2">
                   {analysisResult.keywordMatches.filter(k => k.found).length}/{analysisResult.keywordMatches.length}
                 </div>
                 <div className="text-sm text-muted-foreground">Keywords Matched</div>
               </div>
               
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-neon-pink mb-2">
+                <div className="text-2xl font-bold text-ice-dark mb-2">
                   {analysisResult.hardSkillsAnalysis.foundSkills.length}/{analysisResult.hardSkillsAnalysis.requiredSkills.length}
                 </div>
                 <div className="text-sm text-muted-foreground">Skills Matched</div>
               </div>
               
               <div className="cyber-card text-center">
-                <div className="text-2xl font-bold text-neon-green mb-2">
+                <div className="text-2xl font-bold text-ice-medium mb-2">
                   {analysisResult.formattingCheck.score}%
                 </div>
                 <div className="text-sm text-muted-foreground">Format Score</div>
@@ -249,7 +249,7 @@ const handleAnalyze = async () => {
 
           {/* Top Recommendations */}
           <div className="cyber-card">
-            <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
+            <h3 className="text-lg font-semibold text-ice-dark font-mono mb-4">
               TOP RECOMMENDATIONS
             </h3>
             <div className="space-y-3">
@@ -282,22 +282,22 @@ const handleAnalyze = async () => {
             <div className="space-y-6">
               {/* Keyword Analysis */}
               <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
+                <h3 className="text-lg font-semibold text-ice-dark font-mono mb-4">
                   KEYWORD ANALYSIS
                 </h3>
                 <div className="grid gap-2 max-h-60 overflow-y-auto">
                   {analysisResult.keywordMatches.slice(0, 20).map((keyword, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 rounded bg-space-blue/20">
+                    <div key={index} className="flex items-center justify-between p-2 rounded bg-ice-light">
                       <span className="text-sm font-mono">{keyword.keyword}</span>
                       <div className="flex items-center gap-2">
                         <span className={`text-xs px-2 py-1 rounded ${
-                          keyword.importance === 'high' ? 'bg-red-400/20 text-red-400' :
-                          keyword.importance === 'medium' ? 'bg-yellow-400/20 text-yellow-400' :
-                          'bg-blue-400/20 text-blue-400'
+                          keyword.importance === 'high' ? 'bg-red-100 text-red-700' :
+                          keyword.importance === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-ice-light text-ice-dark'
                         }`}>
                           {keyword.importance}
                         </span>
-                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-neon-green' : 'bg-red-400'}`} />
+                        <span className={`w-3 h-3 rounded-full ${keyword.found ? 'bg-ice-medium' : 'bg-red-400'}`} />
                       </div>
                     </div>
                   ))}
@@ -306,25 +306,25 @@ const handleAnalyze = async () => {
 
               {/* Skills Analysis */}
               <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
+                <h3 className="text-lg font-semibold text-ice-dark font-mono mb-4">
                   SKILLS ANALYSIS
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="text-sm font-semibold text-neon-green mb-2">Found Skills</h4>
+                    <h4 className="text-sm font-semibold text-ice-medium mb-2">Found Skills</h4>
                     <div className="space-y-1">
                       {analysisResult.hardSkillsAnalysis.foundSkills.map((skill, index) => (
-                        <div key={index} className="text-sm font-mono text-neon-green">
+                        <div key={index} className="text-sm font-mono text-ice-medium">
                           ✓ {skill}
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-red-400 mb-2">Missing Critical Skills</h4>
+                    <h4 className="text-sm font-semibold text-red-600 mb-2">Missing Critical Skills</h4>
                     <div className="space-y-1">
                       {analysisResult.hardSkillsAnalysis.missingCriticalSkills.map((skill, index) => (
-                        <div key={index} className="text-sm font-mono text-red-400">
+                        <div key={index} className="text-sm font-mono text-red-600">
                           ✗ {skill}
                         </div>
                       ))}
@@ -335,28 +335,28 @@ const handleAnalyze = async () => {
 
               {/* Formatting Check */}
               <div className="cyber-card">
-                <h3 className="text-lg font-semibold text-neon-pink font-mono mb-4">
+                <h3 className="text-lg font-semibold text-ice-dark font-mono mb-4">
                   FORMATTING ANALYSIS
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="text-sm font-semibold text-neon-green mb-2">Strengths</h4>
+                    <h4 className="text-sm font-semibold text-ice-medium mb-2">Strengths</h4>
                     <div className="space-y-1">
                       {analysisResult.formattingCheck.strengths.map((strength, index) => (
-                        <div key={index} className="text-sm text-neon-green">
+                        <div key={index} className="text-sm text-ice-medium">
                           ✓ {strength}
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-yellow-400 mb-2">Issues</h4>
+                    <h4 className="text-sm font-semibold text-yellow-700 mb-2">Issues</h4>
                     <div className="space-y-1">
                       {analysisResult.formattingCheck.issues.map((issue, index) => (
                         <div key={index} className={`text-sm ${
-                          issue.type === 'critical' ? 'text-red-400' :
-                          issue.type === 'warning' ? 'text-yellow-400' :
-                          'text-blue-400'
+                          issue.type === 'critical' ? 'text-red-600' :
+                          issue.type === 'warning' ? 'text-yellow-700' :
+                          'text-ice-dark'
                         }`}>
                           {issue.type === 'critical' ? '⚠' : issue.type === 'warning' ? '⚡' : 'ℹ'} {issue.message}
                         </div>

@@ -6,44 +6,44 @@
 
 @layer base {
   :root {
-    --background: 219 43% 8%;
-    --foreground: 190 100% 85%;
+    --background: 240 249 248; /* #F0FBFA - lightest ice */
+    --foreground: 32 48 56; /* #203038 - darkest for text */
 
-    --card: 219 43% 12%;
-    --card-foreground: 190 100% 85%;
+    --card: 203 228 237; /* #CBE4ED - light ice for cards */
+    --card-foreground: 32 48 56; /* #203038 - darkest for text */
 
-    --popover: 219 43% 12%;
-    --popover-foreground: 190 100% 85%;
+    --popover: 203 228 237; /* #CBE4ED - light ice */
+    --popover-foreground: 32 48 56; /* #203038 - darkest for text */
 
-    --primary: 190 100% 55%;
-    --primary-foreground: 219 43% 8%;
+    --primary: 87 173 198; /* #57ADC6 - medium ice */
+    --primary-foreground: 32 48 56; /* #203038 - darkest */
 
-    --secondary: 219 43% 16%;
-    --secondary-foreground: 190 100% 85%;
+    --secondary: 135 173 198; /* #87ADC6 - medium ice */
+    --secondary-foreground: 32 48 56; /* #203038 - darkest */
 
-    --muted: 219 43% 16%;
-    --muted-foreground: 190 50% 65%;
+    --muted: 203 228 237; /* #CBE4ED - light ice */
+    --muted-foreground: 87 128 152; /* #578098 - medium dark */
 
-    --accent: 309 100% 55%;
-    --accent-foreground: 219 43% 8%;
+    --accent: 87 128 152; /* #578098 - medium dark ice */
+    --accent-foreground: 240 249 248; /* #F0FBFA - lightest */
 
-    --destructive: 0 62.8% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 220 38 38; /* Keep red for errors */
+    --destructive-foreground: 240 249 248; /* #F0FBFA - lightest */
 
-    --border: 219 43% 20%;
-    --input: 219 43% 16%;
-    --ring: 190 100% 55%;
+    --border: 135 173 198; /* #87ADC6 - medium ice */
+    --input: 203 228 237; /* #CBE4ED - light ice */
+    --ring: 87 173 198; /* #57ADC6 - medium ice */
 
     --radius: 0.75rem;
 
-    --sidebar-background: 219 43% 8%;
-    --sidebar-foreground: 190 100% 85%;
-    --sidebar-primary: 190 100% 55%;
-    --sidebar-primary-foreground: 219 43% 8%;
-    --sidebar-accent: 219 43% 12%;
-    --sidebar-accent-foreground: 190 100% 85%;
-    --sidebar-border: 219 43% 20%;
-    --sidebar-ring: 190 100% 55%;
+    --sidebar-background: 240 249 248; /* #F0FBFA - lightest */
+    --sidebar-foreground: 32 48 56; /* #203038 - darkest */
+    --sidebar-primary: 87 173 198; /* #57ADC6 - medium ice */
+    --sidebar-primary-foreground: 32 48 56; /* #203038 - darkest */
+    --sidebar-accent: 203 228 237; /* #CBE4ED - light ice */
+    --sidebar-accent-foreground: 32 48 56; /* #203038 - darkest */
+    --sidebar-border: 135 173 198; /* #87ADC6 - medium ice */
+    --sidebar-ring: 87 173 198; /* #57ADC6 - medium ice */
   }
 }
 
@@ -53,8 +53,8 @@
   }
 
   body {
-    @apply bg-space-dark text-foreground font-mono;
-    background: linear-gradient(-45deg, #0B1426, #1E3A8A, #312E81, #0B1426);
+    @apply bg-ice-lightest text-foreground font-mono;
+    background: linear-gradient(-45deg, #F0FBFA, #CBE4ED, #87ADC6, #F0FBFA);
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;
   }
@@ -65,28 +65,28 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(11, 20, 38, 0.5);
+    background: rgba(240, 251, 250, 0.5);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #00D4FF, #FF006E);
+    background: linear-gradient(45deg, #87ADC6, #578098);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #FF006E, #8B5CF6);
+    background: linear-gradient(45deg, #578098, #203038);
   }
 }
 
 @layer components {
   .cyber-card {
-    @apply bg-card/40 backdrop-blur-lg border border-cyber-blue/30 rounded-lg p-6;
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+    @apply bg-ice-light/60 backdrop-blur-lg border border-ice-medium/40 rounded-lg p-6;
+    box-shadow: 0 8px 32px rgba(135, 173, 198, 0.15);
   }
 
   .neon-border {
-    @apply border border-cyber-blue/50;
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3), inset 0 0 10px rgba(0, 212, 255, 0.1);
+    @apply border border-ice-medium/60;
+    box-shadow: 0 0 10px rgba(135, 173, 198, 0.3), inset 0 0 10px rgba(135, 173, 198, 0.1);
   }
 
   .glow-text {
@@ -94,32 +94,32 @@
   }
 
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    @apply bg-ice-lightest/80 backdrop-blur-md border border-ice-medium/20 rounded-xl;
+    box-shadow: 0 8px 32px rgba(87, 128, 152, 0.1);
   }
 
   .neon-input {
-    @apply bg-background/50 border-cyber-blue/30 text-foreground placeholder:text-muted-foreground;
+    @apply bg-ice-lightest/70 border-ice-medium/40 text-ice-darkest placeholder:text-ice-dark;
     transition: all 0.3s ease;
   }
 
   .neon-input:focus {
-    @apply border-cyber-blue ring-2 ring-cyber-blue/20;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    @apply border-ice-medium ring-2 ring-ice-medium/30;
+    box-shadow: 0 0 20px rgba(135, 173, 198, 0.2);
   }
 
   .cyber-button {
-    @apply bg-gradient-to-r from-cyber-blue to-neon-pink text-space-dark font-semibold py-2 px-6 rounded-lg;
+    @apply bg-gradient-to-r from-ice-medium to-ice-dark text-ice-lightest font-semibold py-2 px-6 rounded-lg;
     @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 20px rgba(135, 173, 198, 0.3);
   }
 
   .cyber-button:hover {
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), 0 0 40px rgba(255, 0, 110, 0.3);
+    box-shadow: 0 0 30px rgba(135, 173, 198, 0.4), 0 0 40px rgba(87, 128, 152, 0.3);
   }
 
   .cyber-button-secondary {
-    @apply border-2 border-dashed border-cyber-blue/30 rounded-lg p-6 text-cyber-blue hover:border-cyber-blue/50 hover:bg-cyber-blue/5 transition-all duration-300;
+    @apply border-2 border-dashed border-ice-medium/40 rounded-lg p-6 text-ice-dark hover:border-ice-medium/60 hover:bg-ice-medium/10 transition-all duration-300;
   }
 
   .cyber-input-group {
@@ -127,7 +127,7 @@
   }
 
   .cyber-label {
-    @apply flex items-center gap-2 text-sm font-medium text-cyber-blue;
+    @apply flex items-center gap-2 text-sm font-medium text-ice-dark;
   }
 
   .cyber-input {
@@ -135,7 +135,7 @@
   }
 
   .cyber-checkbox {
-    @apply rounded border-cyber-blue/30 text-cyber-blue focus:ring-cyber-blue/20;
+    @apply rounded border-ice-medium/40 text-ice-medium focus:ring-ice-medium/30;
   }
 
   .scan-lines::before {
@@ -149,8 +149,8 @@
       0deg,
       transparent,
       transparent 2px,
-      rgba(0, 212, 255, 0.03) 2px,
-      rgba(0, 212, 255, 0.03) 4px
+      rgba(135, 173, 198, 0.03) 2px,
+      rgba(135, 173, 198, 0.03) 4px
     );
     pointer-events: none;
   }
