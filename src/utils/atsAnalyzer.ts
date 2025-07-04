@@ -755,35 +755,65 @@ export const analyzeWithGemini = async (
   
   const result = await enhancedAnalyzer.analyze();
   
-  // Transform to UI-compatible format with proper validation
+  // Type-safe transformation
+  const hardSkillsAnalysis = {
+    foundSkills: ensureValidArray<string>(result.hardSkillsAnalysis.matchedSkills),
+    requiredSkills: [
+      ...ensureValidArray<string>(result.hardSkillsAnalysis.matchedSkills),
+      ...ensureValidArray<string>(result.hardSkillsAnalysis.missingSkills)
+    ],
+    missingCriticalSkills: ensureValidArray<string>(result.hardSkillsAnalysis.missingSkills),
+    skillsScore: ensureValidNumber(result.hardSkillsAnalysis.skillsScore, 50),
+    recommendations: ensureValidArray<string>(result.hardSkillsAnalysis.recommendations)
+  };
+
+  const keywordMatches = ensureValidArray<KeywordMatch>(result.keywordMatches).map(match => ({
+    keyword: typeof match.keyword === 'string' ? match.keyword : '',
+    found: typeof match.frequency === 'number' ? match.frequency > 0 : false,
+    importance: match.relevance === 'high' || match.relevance === 'medium' || match.relevance === 'low' 
+      ? match.relevance 
+      : 'low',
+    frequency: ensureValidNumber(match.frequency, 0),
+    positions: ensureValidArray<number>(match.positions)
+  }));
+
+  const formattingCheck = {
+  score: ensureValidNumber(result.formattingCheck?.score, 70),
+  strengths: ensureValidArray<string>(result.formattingCheck?.suggestions ?? [])
+    .filter((s): s is string => typeof s === 'string' && !s.toLowerCase().includes('consider')),
+  issues: ensureValidArray<{message: string, type: string}>(result.formattingCheck?.issues ?? []).map(issue => {
+    // Narrow the type to the allowed values
+    let issueType: 'critical' | 'warning' | 'info' = 'warning';
+    if (typeof issue.type === 'string') {
+      if (issue.type.toLowerCase().includes('critical')) {
+        issueType = 'critical';
+      } else if (issue.type.toLowerCase().includes('suggestion')) {
+        issueType = 'info';
+      }
+    }
+    return {
+      message: typeof issue.message === 'string' ? issue.message : 'Unknown issue',
+      type: issueType
+    };
+  }),
+  suggestions: ensureValidArray<string>(result.formattingCheck?.suggestions ?? []),
+  fontConsistency: typeof result.formattingCheck?.fontConsistency === 'boolean' 
+    ? result.formattingCheck.fontConsistency 
+    : true,
+  spacing: typeof result.formattingCheck?.spacing === 'boolean' 
+    ? result.formattingCheck.spacing 
+    : true,
+  structure: typeof result.formattingCheck?.structure === 'boolean' 
+    ? result.formattingCheck.structure 
+    : false
+};
+
   return {
     ...result,
     overallScore: ensureValidNumber(result.overallScore, 65),
-    hardSkillsAnalysis: {
-      foundSkills: ensureValidArray(result.hardSkillsAnalysis.matchedSkills),
-      requiredSkills: [...ensureValidArray(result.hardSkillsAnalysis.matchedSkills), ...ensureValidArray(result.hardSkillsAnalysis.missingSkills)],
-      missingCriticalSkills: ensureValidArray(result.hardSkillsAnalysis.missingSkills),
-      skillsScore: ensureValidNumber(result.hardSkillsAnalysis.skillsScore, 50),
-      recommendations: ensureValidArray(result.hardSkillsAnalysis.recommendations)
-    },
-    keywordMatches: ensureValidArray(result.keywordMatches).map(match => ({
-      ...match,
-      found: match.frequency > 0,
-      importance: match.relevance,
-      frequency: ensureValidNumber(match.frequency, 0),
-      positions: ensureValidArray(match.positions)
-    })),
-    formattingCheck: {
-      ...result.formattingCheck,
-      score: ensureValidNumber(result.formattingCheck.score, 70),
-      strengths: ensureValidArray(result.formattingCheck.suggestions).filter(s => !s.toLowerCase().includes('consider')),
-      issues: ensureValidArray(result.formattingCheck.issues).map(issue => ({
-        message: issue,
-        type: issue.toLowerCase().includes('critical') ? 'critical' : 
-              issue.toLowerCase().includes('suggestion') ? 'info' : 'warning'
-      })),
-      suggestions: ensureValidArray(result.formattingCheck.suggestions)
-    }
+    hardSkillsAnalysis,
+    keywordMatches,
+    formattingCheck
   };
 };
 
