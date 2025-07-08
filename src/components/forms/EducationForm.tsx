@@ -76,7 +76,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ data, onUpdate }) 
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-medium text-cyber-blue">
                   <Book className="w-4 h-4" />
-                  Degree
+                  Qualification
                 </label>
                 <input
                   type="text"

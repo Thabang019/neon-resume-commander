@@ -103,7 +103,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({ data, onUpdate }) => {
                   className="w-full px-4 py-3 rounded-lg neon-input font-mono text-sm"
                 >
                   {skillLevels.map(level => (
-                    <option key={level} value={level} className="bg-space-dark">
+                    <option key={level} value={level} className="bg-space-light">
                       {level}
                     </option>
                   ))}

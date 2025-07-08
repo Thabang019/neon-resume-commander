@@ -16,8 +16,8 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ data, onUpda
   const fields = [
     { key: 'fullName' as keyof PersonalInfo, label: 'Full Name', icon: User, placeholder: 'John Doe' },
     { key: 'email' as keyof PersonalInfo, label: 'Email Address', icon: Mail, placeholder: 'john.doe@example.com' },
-    { key: 'phone' as keyof PersonalInfo, label: 'Phone Number', icon: Phone, placeholder: '+1 (555) 123-4567' },
-    { key: 'location' as keyof PersonalInfo, label: 'Location', icon: MapPin, placeholder: 'New York, NY' },
+    { key: 'phone' as keyof PersonalInfo, label: 'Phone Number', icon: Phone, placeholder: '+27 63 223 4567' },
+    { key: 'location' as keyof PersonalInfo, label: 'Location', icon: MapPin, placeholder: 'Wooodstock, Cape Town' },
     { key: 'linkedIn' as keyof PersonalInfo, label: 'LinkedIn Profile', icon: Linkedin, placeholder: 'linkedin.com/in/johndoe' },
     { key: 'portfolio' as keyof PersonalInfo, label: 'Portfolio Website', icon: Globe, placeholder: 'johndoe.dev' },
   ];

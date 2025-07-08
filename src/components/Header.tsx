@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-ice-darkest glow-text">
-              NEON RESUME COMMANDER
+              RESUME COMMANDER
             </h1>
             <p className="text-sm text-ice-darkest">
               // Initializing futuristic resume generation protocol...
