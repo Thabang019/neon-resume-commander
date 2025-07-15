@@ -401,7 +401,7 @@ export class ATSAnalyzer {
 
 // Gemini API service class using fetch
 export class GeminiATSService {
-  private apiKey: string = 'AIzaSyC6D0f4-yB-JJD54aqhtpJOzU6SGMK4hvk'
+  private apiKey: string =  process.env.GOOGLE_API_KEY
   private baseUrl: string = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
   constructor(apiKey: string) {
